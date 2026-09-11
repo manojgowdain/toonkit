@@ -1,46 +1,41 @@
 {
-  "name": "toonkit",
+  "name": "@manojgowdain/toonkit",
   "version": "2.2.2",
   "description": "Typed Object Oriented Notation (TOON) parser and serializer. Convert TOON ↔ JSON with full type support, nested structures, and high-performance parsing for APIs, IoT, and real-time systems.",
+  "type": "module",
   "main": "./dist/cjs/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/cjs/index.js",
-      "import": "./dist/index.js",
       "types": "./dist/index.d.ts",
-      "default": "./dist/cjs/index.js"
+      "import": "./dist/index.js",
+      "require": "./dist/cjs/index.js"
     },
     "./express": {
-      "require": "./dist/cjs/express/index.js",
-      "import": "./dist/express/index.js",
       "types": "./dist/express/index.d.ts",
-      "default": "./dist/cjs/express/index.js"
+      "import": "./dist/express/index.js",
+      "require": "./dist/cjs/express/index.js"
     },
     "./fastify": {
-      "require": "./dist/cjs/fastify/index.js",
-      "import": "./dist/fastify/index.js",
       "types": "./dist/fastify/index.d.ts",
-      "default": "./dist/cjs/fastify/index.js"
+      "import": "./dist/fastify/index.js",
+      "require": "./dist/cjs/fastify/index.js"
     },
     "./hono": {
-      "require": "./dist/cjs/hono/index.js",
-      "import": "./dist/hono/index.js",
       "types": "./dist/hono/index.d.ts",
-      "default": "./dist/cjs/hono/index.js"
+      "import": "./dist/hono/index.js",
+      "require": "./dist/cjs/hono/index.js"
     },
     "./fetch": {
-      "require": "./dist/cjs/fetch/index.js",
-      "import": "./dist/fetch/index.js",
       "types": "./dist/fetch/index.d.ts",
-      "default": "./dist/cjs/fetch/index.js"
+      "import": "./dist/fetch/index.js",
+      "require": "./dist/cjs/fetch/index.js"
     },
     "./next/server": {
-      "require": "./dist/cjs/next/server.js",
-      "import": "./dist/next/server.js",
       "types": "./dist/next/server.d.ts",
-      "default": "./dist/cjs/next/server.js"
+      "import": "./dist/next/server.js",
+      "require": "./dist/cjs/next/server.js"
     }
   },
   "files": [
@@ -49,10 +44,11 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsc && tsc -p tsconfig.cjs.json",
-    "test": "npm run build && node test/all-exports.mjs",
-    "clean": "rm -rf dist",
-    "prepublishOnly": "npm run build"
+    "build": "tsc -p tsconfig.json && tsc -p tsconfig.cjs.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "npm run build && node --test test/*.test.mjs && node test/all-exports.mjs",
+    "clean": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
+    "prepublishOnly": "npm run typecheck && npm test"
   },
   "keywords": [
     "toon",
@@ -80,23 +76,28 @@
     "iot",
     "mqtt",
     "real-time",
-    "fast-serialization"
+    "fast-serialization",
+    "typescript",
+    "zod"
   ],
   "author": "Manoj Gowda B R",
   "homepage": "https://toonkit.js.org",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ManojGowda89/toonkit.git"
+    "url": "https://github.com/manojgowdain/toonkit.git"
   },
   "bugs": {
-    "url": "https://github.com/ManojGowda89/toonkit/issues"
+    "url": "https://github.com/manojgowdain/toonkit/issues"
   },
   "funding": {
     "type": "github",
-    "url": "https://github.com/sponsors/ManojGowda89"
+    "url": "https://github.com/sponsors/manojgowdain"
   },
   "license": "MIT",
   "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
     "node": ">=14"
   },
@@ -115,13 +116,14 @@
   "dependencies": {
     "axios": "^1.16.1",
     "compression": "^1.8.1",
-    "fastify-plugin": "^5.1.0"
+    "fastify-plugin": "^5.1.0",
+    "zod": "^4.6.1"
   },
   "peerDependencies": {
     "express": "^5.1.0",
     "fastify": "^5.8.0",
     "hono": "^4.12.0",
-    "next": "^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0"
+    "next": "^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^20.0.0"
   },
   "peerDependenciesMeta": {
     "express": {

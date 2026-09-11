@@ -1,8 +1,8 @@
-# toonkit
+# @manojgowdain/toonkit
 
-![npm](https://img.shields.io/npm/v/toonkit)
-![downloads](https://img.shields.io/npm/dw/toonkit)
-![license](https://img.shields.io/npm/l/toonkit)
+![npm](https://img.shields.io/npm/v/@manojgowdain/toonkit)
+![downloads](https://img.shields.io/npm/dw/@manojgowdain/toonkit)
+![license](https://img.shields.io/npm/l/@manojgowdain/toonkit)
 
 Typed Object Oriented Notation (TOON) parser, serializer, and adapter toolkit for JavaScript and TypeScript.
 
@@ -20,17 +20,61 @@ The package root exports the core helpers plus the fetch client:
 
 The package also exposes adapter subpaths:
 
-- `toonkit/fetch`
-- `toonkit/express`
-- `toonkit/fastify`
-- `toonkit/hono`
-- `toonkit/next/server`
+- `@manojgowdain/toonkit/fetch`
+- `@manojgowdain/toonkit/express`
+- `@manojgowdain/toonkit/fastify`
+- `@manojgowdain/toonkit/hono`
+- `@manojgowdain/toonkit/next/server`
 
 ## Install
 
+### npm
+
 ```bash
-npm install toonkit
+npm install @manojgowdain/toonkit
 ```
+
+### JSR (Deno)
+
+```bash
+deno add jsr:@manojgowdain/toonkit
+```
+
+### GitHub
+
+```bash
+npm install github:manojgowdain/toonkit
+```
+
+Or via SSH:
+
+```bash
+npm install git+ssh://git@github.com/manojgowdain/toonkit.git
+```
+
+### Migration from old `toonkit`
+
+If you were using the old `toonkit` package, update your dependencies:
+
+```bash
+# Old
+npm install toonkit
+
+# New
+npm install @manojgowdain/toonkit
+```
+
+Update your imports:
+
+```js
+// Old
+import { toonToJson } from "toonkit";
+
+// New
+import { toonToJson } from "@manojgowdain/toonkit";
+```
+
+The package was republished under the new npm scope `@manojgowdain/toonkit` due to loss of access to the original npm account.
 
 ## Core format
 
@@ -69,7 +113,7 @@ Supported type codes in the current implementation:
 Parses TOON text into a JavaScript object.
 
 ```js
-import { toonToJson } from "toonkit";
+import { toonToJson } from "@manojgowdain/toonkit";
 
 const data = toonToJson(`device_id[1]{0:s}:\nDEVICE_PRO_01\n`);
 ```
@@ -85,7 +129,7 @@ Notes:
 Serializes a JavaScript object into TOON text.
 
 ```js
-import { jsonToToon } from "toonkit";
+import { jsonToToon } from "@manojgowdain/toonkit";
 
 const toon = jsonToToon({
   device_id: "DEVICE_PRO_01",
@@ -122,7 +166,7 @@ Returns:
 Example:
 
 ```js
-import { toonFetch } from "toonkit";
+import { toonFetch } from "@manojgowdain/toonkit";
 
 const result = await toonFetch("http://localhost:3000/users", {
   method: "POST",
@@ -150,7 +194,7 @@ The shared axios instance used internally by `toonFetch`.
 
 ## Express
 
-Import from `toonkit/express`.
+Import from `@manojgowdain/toonkit/express`.
 
 Available exports:
 
@@ -164,7 +208,7 @@ Available exports:
 
 ```js
 import express from "express";
-import { toon } from "toonkit/express";
+import { toon } from "@manojgowdain/toonkit/express";
 
 const app = express();
 app.use(...toon());
@@ -183,7 +227,7 @@ What the adapter does:
 
 ## Fastify
 
-Import from `toonkit/fastify`.
+Import from `@manojgowdain/toonkit/fastify`.
 
 Available exports:
 
@@ -193,7 +237,7 @@ Available exports:
 
 ```js
 import Fastify from "fastify";
-import { toon } from "toonkit/fastify";
+import { toon } from "@manojgowdain/toonkit/fastify";
 
 const fastify = Fastify();
 await fastify.register(toon);
@@ -211,7 +255,7 @@ What the adapter does:
 
 ## Hono
 
-Import from `toonkit/hono`.
+Import from `@manojgowdain/toonkit/hono`.
 
 Available exports:
 
@@ -221,7 +265,7 @@ Available exports:
 
 ```ts
 import { Hono } from "hono";
-import { toon } from "toonkit/hono";
+import { toon } from "@manojgowdain/toonkit/hono";
 
 const app = new Hono();
 app.use("*", toon());
@@ -239,7 +283,7 @@ What the adapter does:
 
 ## Next.js
 
-Import from `toonkit/next/server`.
+Import from `@manojgowdain/toonkit/next/server`.
 
 Available exports:
 
@@ -248,7 +292,7 @@ Available exports:
 
 ```ts
 import { NextRequest } from "next/server";
-import { ToonResponse, parseToonRequest } from "toonkit/next/server";
+import { ToonResponse, parseToonRequest } from "@manojgowdain/toonkit/next/server";
 
 export async function POST(req: NextRequest) {
   const body = await parseToonRequest(req);

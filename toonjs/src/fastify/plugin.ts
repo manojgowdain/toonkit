@@ -1,7 +1,7 @@
 import fp from "fastify-plugin";
 import type { FastifyPluginAsync } from "fastify";
-import { setupParser } from "./parser";
-import { setupResponse } from "./response";
+import { setupParser } from "./parser.js";
+import { setupResponse } from "./response.js";
 
 export type ToonFastifyOptions = {};
 

@@ -1,9 +1,9 @@
 import type { Context } from "hono";
-import { toonToJson } from "../index";
+import { toonToJson } from "../index.js";
 
 declare module "hono" {
   interface HonoRequest {
-    toon(): Promise<any>;
+    toon(): Promise<unknown>;
   }
 }
 

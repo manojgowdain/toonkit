@@ -1,2 +1,2 @@
-export { jsonToToon, toonToJson } from "../index";
-export { toon, type ToonFastifyOptions } from "./plugin";
+export { jsonToToon, toonToJson } from "../index.js";
+export { toon, type ToonFastifyOptions } from "./plugin.js";

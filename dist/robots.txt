@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://toonkit.js.org/sitemap.xml
+Sitemap: https://toonkit.manojgowda.in/sitemap.xml

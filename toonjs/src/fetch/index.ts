@@ -3,7 +3,8 @@ import axios, {
   type AxiosRequestConfig,
   type AxiosResponse,
 } from "axios";
-import { jsonToToon, toonToJson } from "../index";
+import { jsonToToon, toonToJson } from "../index.js";
+import type { ToonDocument } from "../types.js";
 
 declare global {
   var toonAxios: AxiosInstance | undefined;
@@ -15,7 +16,7 @@ export interface ToonFetchOptions
    * The payload to send. If `Content-Type` is `application/toon` (default when data is provided),
    * this will automatically be serialized to TOON format.
    */
-  data?: any;
+  data?: unknown;
   /**
    * Raw body string/buffer, overrides `data` if provided.
    */
@@ -26,7 +27,7 @@ export interface ToonFetchOptions
   token?: string | null | (() => string | null | undefined);
 }
 
-export interface ToonFetchResponse<T = any> {
+export interface ToonFetchResponse<T = unknown> {
   data: T | null;
   response: Response;
 }
@@ -91,7 +92,7 @@ export function configureToonFetch(options: ToonClientOptions = {}): AxiosInstan
   Object.assign(toonAxios.defaults, rest);
 
   if (headers) {
-    const defaults = toonAxios.defaults.headers as any;
+    const defaults = toonAxios.defaults.headers as Record<string, unknown>;
     defaults.common = {
       ...(defaults.common || {}),
       ...headersToObject(headers),
@@ -100,7 +101,10 @@ export function configureToonFetch(options: ToonClientOptions = {}): AxiosInstan
 
   const authorization = resolveToken(token);
   if (authorization !== undefined) {
-    (toonAxios.defaults.headers as any).common.Authorization = authorization;
+    toonAxios.defaults.headers.common = {
+      ...toonAxios.defaults.headers.common,
+      Authorization: authorization
+    };
   }
 
   return toonAxios;
@@ -117,7 +121,7 @@ export function createToonAxios(options: ToonClientOptions = {}): AxiosInstance 
   Object.assign(client.defaults, rest);
 
   if (headers) {
-    const defaults = client.defaults.headers as any;
+    const defaults = client.defaults.headers;
     defaults.common = {
       ...(defaults.common || {}),
       ...headersToObject(headers),
@@ -126,7 +130,7 @@ export function createToonAxios(options: ToonClientOptions = {}): AxiosInstance 
 
   const authorization = resolveToken(token);
   if (authorization !== undefined) {
-    (client.defaults.headers as any).common.Authorization = authorization;
+    client.defaults.headers.common.Authorization = authorization;
   }
 
   return client;
@@ -157,7 +161,7 @@ async function resolveRequestBody(
 
     const contentType = headers.get("Content-Type");
     if (contentType?.includes("application/toon")) {
-      return { body: jsonToToon(init.data), headers };
+      return { body: jsonToToon(init.data as ToonDocument), headers };
     }
 
     if (contentType?.includes("application/json")) {
@@ -193,7 +197,7 @@ async function resolveRequestBody(
  * A wrapper around the native `fetch` API that automatically handles
  * `application/toon` content types for both request and response.
  */
-export async function toonFetch<T = any>(
+export async function toonFetch<T = unknown>(
   input: RequestInfo | URL,
   init?: ToonFetchOptions
 ): Promise<ToonFetchResponse<T>> {
@@ -214,16 +218,16 @@ export async function toonFetch<T = any>(
 
   const rawBody = typeof response.data === "string" ? response.data : String(response.data ?? "");
   let parsedData: T | null = null;
-  const responseHeaders = response.headers as any;
-  const contentType =
-    typeof responseHeaders?.get === "function"
-      ? responseHeaders.get("content-type")
-      : responseHeaders?.["content-type"];
+  const responseHeaders = response.headers;
+  const rawContentType = typeof responseHeaders?.get === "function"
+    ? responseHeaders.get("content-type")
+    : responseHeaders?.["content-type"];
+  const contentType = Array.isArray(rawContentType) ? rawContentType.join(" ") : String(rawContentType ?? "");
 
   // Only attempt to parse if there's a body and it's not a 204 No Content
   if (response.status !== 204) {
     if (contentType?.includes("application/toon")) {
-      parsedData = rawBody ? toonToJson(rawBody) : null;
+      parsedData = rawBody ? (toonToJson(rawBody) as unknown as T) : null;
     } else if (contentType?.includes("application/json")) {
       parsedData = rawBody ? JSON.parse(rawBody) : null;
     }

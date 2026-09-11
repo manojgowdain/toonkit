@@ -7,6 +7,10 @@
     "paths": {
       "@angular/common/http": ["node_modules/@angular/common/types/http.d.ts"]
     },
-    "outDir": "./dist/cjs"
-  }
+    "outDir": "./dist/cjs",
+    "declaration": false,
+    "declarationMap": false,
+    "sourceMap": true
+  },
+  "include": ["src"]
 }

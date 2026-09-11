@@ -1,0 +1,10 @@
+src/
+test/
+.github/
+.env
+.env.*
+node_modules/
+*.tgz
+*.log
+coverage/
+docs/

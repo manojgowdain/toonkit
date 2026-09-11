@@ -1,2 +1,2 @@
-export { jsonToToon, toonToJson } from "../index";
-export { toon, type ToonHonoOptions } from "./middleware";
+export { jsonToToon, toonToJson } from "../index.js";
+export { toon, type ToonHonoOptions } from "./middleware.js";

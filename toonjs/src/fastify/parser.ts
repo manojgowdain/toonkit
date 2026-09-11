@@ -1,9 +1,9 @@
 import type { FastifyInstance } from "fastify";
-import { toonToJson } from "../index";
+import { toonToJson } from "../index.js";
 
 declare module "fastify" {
   interface FastifyRequest {
-    toon(): any;
+    toon(): unknown;
   }
 }
 

@@ -1,6 +1,6 @@
 import type { MiddlewareHandler } from "hono";
-import { setupRequestParser } from "./parser";
-import { setupResponseHandler } from "./response";
+import { setupRequestParser } from "./parser.js";
+import { setupResponseHandler } from "./response.js";
 
 export type ToonHonoOptions = {};
 
