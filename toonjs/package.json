@@ -1,6 +1,6 @@
 {
   "name": "toonkit2",
-  "version": "2.2.3",
+  "version": "2.3.3",
   "description": "Typed Object Oriented Notation (TOON) parser and serializer. Convert TOON ↔ JSON with full type support, nested structures, and high-performance parsing for APIs, IoT, and real-time systems.",
   "main": "./dist/cjs/index.js",
   "module": "./dist/index.js",
