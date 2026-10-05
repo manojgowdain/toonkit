@@ -103,6 +103,10 @@ async function main() {
       fn: async () => {
         assert.deepEqual(core.toonToJson('name[1]{0:s}:\nToon\n'), { name: 'Toon' });
         assert.match(core.jsonToToon({ active: true }), /active\[1\]\{0:b\}:/);
+        assert.doesNotMatch(core.jsonToToon({
+          tags: ['toon', 'json', 'fast'],
+          matrix: [[1, 2], [3, 4]],
+        }), /\n\s*\n/);
 
         const nested = `employees[2]{id:n,name:s,salary:a,active:b}:
 1,Riya,"[6565,65656,56565,6656]",true

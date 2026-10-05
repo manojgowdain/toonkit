@@ -196,7 +196,12 @@ export function jsonToToon(obj: any): string {
 
   for (const [key, val] of entries) {
     if (Array.isArray(val)) {
-      if (val.length > 0 && typeof val[0] === "object" && val[0] !== null) {
+      if (
+        val.length > 0 &&
+        typeof val[0] === "object" &&
+        val[0] !== null &&
+        !Array.isArray(val[0])
+      ) {
         const fields = Object.keys(val[0]);
         const schema = fields
           .map((field) => `${field}:${getType(val[0][field])}`)
@@ -211,24 +216,23 @@ export function jsonToToon(obj: any): string {
           result += `${row}\n`;
         });
 
-        result += "\n";
         continue;
       }
 
       result += `${key}[1]{0:a}:\n`;
-      result += `${formatValue(val, "a")}\n\n`;
+      result += `${formatValue(val, "a")}\n`;
       continue;
     }
 
     if (val !== null && typeof val === "object") {
       result += `${key}[1]{0:j}:\n`;
-      result += `${formatValue(val, "j")}\n\n`;
+      result += `${formatValue(val, "j")}\n`;
       continue;
     }
 
     const type = getType(val);
     result += `${key}[1]{0:${type}}:\n`;
-    result += `${formatValue(val, type)}\n\n`;
+    result += `${formatValue(val, type)}\n`;
   }
 
   return result.trim();

@@ -22,6 +22,12 @@ function detectInputType(value: string): InputMode {
     JSON.parse(trimmed);
     return "json";
   } catch {
+    try {
+      parseJsonWithTrailingCommas(trimmed);
+      return "json";
+    } catch {
+      // Continue with TOON detection.
+    }
     // Check for TOON pattern: resourceName{...}: or resourceName[n]{...}:
     if (/\w+(\[\d+\])?\{[^}]+\}:/.test(trimmed)) return "toon";
     return "unknown";
@@ -30,6 +36,53 @@ function detectInputType(value: string): InputMode {
 
 function formatBytes(bytes: number): string {
   return bytes < 1024 ? `${bytes}B` : `${(bytes / 1024).toFixed(1)}KB`;
+}
+
+function compactToonOutput(value: string): string {
+  return value.replace(/\n{2,}/g, "\n").trim();
+}
+
+function removeTrailingCommas(value: string): string {
+  let result = "";
+  let quote: string | null = null;
+  let escaped = false;
+
+  for (let index = 0; index < value.length; index += 1) {
+    const character = value[index];
+
+    if (escaped) {
+      result += character;
+      escaped = false;
+      continue;
+    }
+
+    if (quote) {
+      result += character;
+      if (character === "\\") escaped = true;
+      else if (character === quote) quote = null;
+      continue;
+    }
+
+    if (character === '"' || character === "'") {
+      quote = character;
+      result += character;
+      continue;
+    }
+
+    if (character === ",") {
+      let next = index + 1;
+      while (next < value.length && /\s/.test(value[next])) next += 1;
+      if (value[next] === "}" || value[next] === "]") continue;
+    }
+
+    result += character;
+  }
+
+  return result;
+}
+
+function parseJsonWithTrailingCommas(value: string): unknown {
+  return JSON.parse(removeTrailingCommas(value));
 }
 
 // ── Styles ────────────────────────────────────────────────────────────────────
@@ -716,7 +769,7 @@ export default function Playground() {
       // the browser instead of depending on Next.js API routes.
       const outputText =
         detectedType === "json"
-          ? jsonToToon(JSON.parse(input))
+          ? compactToonOutput(jsonToToon(parseJsonWithTrailingCommas(input)))
           : JSON.stringify(toonToJson(input), null, 2);
 
       const durationMs = Math.round(performance.now() - t0);
@@ -749,6 +802,24 @@ export default function Playground() {
     setResult(null);
     setStatus("idle");
     setErrorMsg("");
+  };
+
+  const formatJson = () => {
+    try {
+      const normalized = removeTrailingCommas(input);
+      setInput(JSON.stringify(JSON.parse(normalized), null, 2));
+      setStatus("idle");
+      setErrorMsg("");
+      setOutput("");
+      setResult(null);
+    } catch (error) {
+      setStatus("error");
+      setErrorMsg(
+        `JSON formatting failed: ${
+          error instanceof Error ? error.message : String(error)
+        }`
+      );
+    }
   };
 
   // Savings calculation
@@ -866,6 +937,14 @@ export default function Playground() {
                 {detectedType === "json" ? "JSON Input" : detectedType === "toon" ? "TOON Input" : "Input"}
               </span>
               <div className="pg-pane-actions">
+                <button
+                  className="pg-pill"
+                  onClick={formatJson}
+                  disabled={!input.trim() || detectedType === "toon"}
+                  title="Remove trailing commas and format JSON"
+                >
+                  format JSON
+                </button>
                 <button
                   className="pg-pill"
                   onClick={() => {
