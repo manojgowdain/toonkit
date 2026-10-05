@@ -5,10 +5,6 @@ import axios, {
 } from "axios";
 import { jsonToToon, toonToJson } from "../index";
 
-declare global {
-  var toonAxios: AxiosInstance | undefined;
-}
-
 export interface ToonFetchOptions
   extends Omit<AxiosRequestConfig, "data" | "transformResponse"> {
   /**
@@ -75,10 +71,15 @@ function createResponseLike(
   } as Response;
 }
 
-export const toonAxios = globalThis.toonAxios ?? axios.create();
+type ToonGlobal = typeof globalThis & {
+  toonAxios?: AxiosInstance;
+};
 
-if (!globalThis.toonAxios) {
-  globalThis.toonAxios = toonAxios;
+const toonGlobal = globalThis as ToonGlobal;
+export const toonAxios: AxiosInstance = toonGlobal.toonAxios ?? axios.create();
+
+if (!toonGlobal.toonAxios) {
+  toonGlobal.toonAxios = toonAxios;
 }
 
 export function configureToonFetch(options: ToonClientOptions = {}): AxiosInstance {
