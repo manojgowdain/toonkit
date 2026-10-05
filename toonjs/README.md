@@ -96,11 +96,13 @@ employees.push({ id: 3, name: "Manoj", salary: 100000, active: true });
 
 console.log(employees.filter((employee) => employee.active));
 console.log(employees.toToon());
+console.log(employees.toJSON());
 ```
 
 The runtime supports normal array operations, direct mutation, template
 interpolation, `JSON.stringify`, and compact serialization with updated row
-counts and schemas. It also exposes `toon.toToon(value)`, `toon.toJSON(value)`,
+counts and schemas. Runtime values expose `toToon()` and `toJSON()`. The
+namespace also exposes `toon.toToon(value)`, `toon.toJSON(value)`,
 `toon.clone(value)`, and `toon.equals(a, b)`.
 
 ### `toonToJson(input: string)`

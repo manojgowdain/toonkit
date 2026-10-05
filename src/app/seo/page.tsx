@@ -5,9 +5,9 @@ import { SEO_DESCRIPTORS, SEO_KEYWORDS } from "../seoKeywords";
 import { SEO_LANDING_PAGES } from "./seoPages";
 
 export const metadata: Metadata = {
-  title: "Toon SEO Pages - Toonkit",
+  title: "TOON Format SEO Guide and JavaScript Resources - Toonkit2",
   description:
-    "Explore SEO-focused Toon pages with JavaScript toolkit keywords and developer utility descriptions.",
+    "Explore official Toonkit2 resources for the TOON format, compact JSON alternatives, JavaScript and TypeScript serialization, API payloads, and developer integrations.",
   keywords: SEO_KEYWORDS,
   other: {
     "seo-descriptors": SEO_DESCRIPTORS.join(" | "),

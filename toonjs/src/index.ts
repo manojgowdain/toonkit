@@ -11,6 +11,10 @@ export type ToonPrimitive = string | number | boolean | null;
 export type ToonValue = ToonPrimitive | ToonObject | ToonArray;
 export type ToonObject = { [key: string]: ToonValue };
 export type ToonArray = ToonValue[];
+export type ToonRuntime<T extends ToonValue = ToonValue> = T & {
+  toToon(): string;
+  toJSON(): T;
+};
 
 type ToonField = { name: string; type: string };
 type ToonRuntimeMeta = {
@@ -26,6 +30,11 @@ function attachRuntime<T extends object>(value: T, meta: ToonRuntimeMeta): T {
     configurable: true,
     enumerable: false,
     value: () => serializeRuntime(value),
+  });
+  Object.defineProperty(value, "toJSON", {
+    configurable: true,
+    enumerable: false,
+    value: () => cloneValue(value),
   });
   return value;
 }
@@ -375,7 +384,10 @@ function equalValue(a: unknown, b: unknown): boolean {
 }
 
 export interface ToonTagged {
-  <T = ToonValue>(strings: TemplateStringsArray, ...values: unknown[]): T;
+  <T extends ToonValue = ToonValue>(
+    strings: TemplateStringsArray,
+    ...values: unknown[]
+  ): ToonRuntime<T>;
   <T = ToonValue>(value: T): T;
   toToon<T>(value: T): string;
   toJSON<T>(value: T): T;

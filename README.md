@@ -91,10 +91,13 @@ employees.push({ id: 3, name: "Manoj", salary: 100000, active: true });
 
 console.log(employees.map((employee) => employee.name));
 console.log(employees.toToon());
+console.log(employees.toJSON());
 ```
 
 The tagged runtime behaves like a normal JavaScript array or object and keeps
-TOON schema/count information synchronized when data is mutated.
+TOON schema/count information synchronized when data is mutated. Runtime
+values expose both `toToon()` and `toJSON()`; the latter returns a plain
+JavaScript clone.
 
 ### `toonToJson(input: string)`
 

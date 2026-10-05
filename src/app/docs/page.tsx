@@ -380,8 +380,9 @@ const navItems: NavItem[] = [
   { id: "import", label: "Import & Functions" },
   { id: "runtime", label: "TOON Runtime" },
   { id: "toon-to-json", label: "toonToJson()" },
-  { id: "json-to-toon", label: "jsonToToon()" },
-  { id: "types", label: "Type Codes" },
+  { id: "jsontoon", label: "jsonToToon()" },
+  { id: "toon-data-types", label: "TOON Data Types" },
+  { id: "helpers", label: "Helper Functions" },
   { id: "core-frontend", label: "Core / Frontend" },
   { id: "fetch", label: "Fetch / Client" },
   { id: "express", label: "Express Example" },
@@ -914,6 +915,26 @@ export default function ToonkitDocs() {
                   fn: "jsonToToon(obj: any)",
                   desc: "Converts a JavaScript object/array into TOON format string.",
                 },
+                {
+                  fn: "safeParse(value: string)",
+                  desc: "Parses JSON when valid and preserves the original string when it is not JSON.",
+                },
+                {
+                  fn: "toon.toToon(value)",
+                  desc: "Serializes a runtime value or ordinary JavaScript value to canonical TOON.",
+                },
+                {
+                  fn: "toon.toJSON(value)",
+                  desc: "Returns a plain cloned JavaScript value without runtime metadata.",
+                },
+                {
+                  fn: "toon.clone(value)",
+                  desc: "Creates an independent clone that can be mutated safely.",
+                },
+                {
+                  fn: "toon.equals(a, b)",
+                  desc: "Checks two values for structural equality.",
+                },
               ].map((item, i) => (
                 <div
                   key={item.fn}
@@ -963,13 +984,86 @@ employees.push({ id: 3, name: "Manoj", salary: 100000, active: true });
               The returned value is a real array or object, so property access,
               push/pop/splice, map/filter/find/reduce, destructuring, and
               JSON.stringify work normally. Mutations are reflected in
-              <code style={{ color: theme.accent }}> toToon()</code>; row counts
-              and schemas are recalculated automatically.
+              <code style={{ color: theme.accent }}> toToon()</code>. Parsed
+              values also expose <code style={{ color: theme.accent }}>toJSON()</code>
+              to return a plain JavaScript clone; row counts and schemas are
+              recalculated automatically.
             </p>
             <CodeBlock label="Helpers">{`<span class="fn">toon</span>.toToon(employees);
 <span class="fn">toon</span>.toJSON(employees);
 <span class="fn">toon</span>.clone(employees);
 <span class="fn">toon</span>.equals(a, b);`}</CodeBlock>
+          </section>
+
+          {/* ── HELPER FUNCTIONS ── */}
+          <section id="helpers" className="section-anim" style={{ marginBottom: 64 }}>
+            <SectionHeader
+              id="helpers"
+              icon="🧰"
+              title="TOON Helper Functions"
+              subtitle="Complete reference for runtime and utility helpers."
+            />
+            {[
+              {
+                id: "safeparse",
+                title: "safeParse()",
+                signature: "safeParse(value: string)",
+                description: "Parses valid JSON and returns the original string unchanged when the input is not valid JSON.",
+                example: `safeParse('{\"ok\":true}') // { ok: true }
+safeParse('plain text') // 'plain text'`,
+              },
+              {
+                id: "toontoon",
+                title: "toon.toToon()",
+                signature: "toon.toToon(value)",
+                description: "Serializes a tagged runtime value or ordinary JavaScript object into canonical TOON text.",
+                example: `const output = toon.toToon(employees);`,
+              },
+              {
+                id: "tojson",
+                title: "toJSON()",
+                signature: "value.toJSON() or toon.toJSON(value)",
+                description: "Returns a plain JavaScript clone without runtime metadata, suitable for storage or JSON.stringify.",
+                example: `const plain = employees.toJSON();
+const copy = toon.toJSON(employees);`,
+              },
+              {
+                id: "toonclone",
+                title: "toon.clone()",
+                signature: "toon.clone(value)",
+                description: "Creates an independent deep clone. Changes to the clone do not modify the original value.",
+                example: `const copy = toon.clone(employees);
+copy[0].salary = 1;`,
+              },
+              {
+                id: "toonequals",
+                title: "toon.equals()",
+                signature: "toon.equals(a, b)",
+                description: "Compares arrays, objects, and primitive values using structural equality.",
+                example: `toon.equals({ id: 1 }, { id: 1 }); // true`,
+              },
+            ].map((helper) => (
+              <div
+                key={helper.id}
+                id={helper.id}
+                style={{
+                  borderTop: `1px solid ${theme.border}`,
+                  padding: "24px 0",
+                  scrollMarginTop: 24,
+                }}
+              >
+                <h3 style={{ fontSize: 19, fontWeight: 750, color: theme.text, marginBottom: 8 }}>
+                  {helper.title}
+                </h3>
+                <code style={{ color: theme.accent, fontFamily: "'Space Mono', monospace", fontSize: 13 }}>
+                  {helper.signature}
+                </code>
+                <p style={{ color: theme.textDim, lineHeight: 1.7, margin: "12px 0 16px" }}>
+                  {helper.description}
+                </p>
+                <CodeBlock label={helper.title}>{helper.example}</CodeBlock>
+              </div>
+            ))}
           </section>
 
           {/* ── toonToJson ── */}
@@ -1064,13 +1158,14 @@ true
           </section>
 
           {/* ── jsonToToon ── */}
-          <section id="json-to-toon" className="section-anim" style={{ marginBottom: 64 }}>
+          <section id="jsontoon" className="section-anim" style={{ marginBottom: 64 }}>
             <SectionHeader
-              id="json-to-toon"
+              id="jsontoon"
               icon="🔄"
               title="jsonToToon()"
               subtitle="Convert JavaScript objects to TOON format"
             />
+            <span id="json-to-toon" />
 
             <p style={{ fontSize: 14, color: theme.textDim, marginBottom: 16, lineHeight: 1.7 }}>
               This function inspects your JavaScript object and automatically detects the type
@@ -1148,13 +1243,14 @@ true
           </section>
 
           {/* ── TYPE CODES ── */}
-          <section id="types" className="section-anim" style={{ marginBottom: 64 }}>
+          <section id="toon-data-types" className="section-anim" style={{ marginBottom: 64 }}>
             <SectionHeader
-              id="types"
+              id="toon-data-types"
               icon="🧬"
-              title="Type Codes Reference"
-              subtitle="Complete guide to all supported data types"
+              title="TOON Data Types"
+              subtitle="Complete guide to every supported TOON type code"
             />
+            <span id="types" />
 
             <p style={{ fontSize: 14, color: theme.textDim, marginBottom: 20, lineHeight: 1.7 }}>
               TOON uses single or two-letter codes to declare the type of each field. This

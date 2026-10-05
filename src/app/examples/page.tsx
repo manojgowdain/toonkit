@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { SEO_DESCRIPTORS, SEO_KEYWORDS } from "../seoKeywords";
 
 export const metadata: Metadata = {
-  title: "Examples - Toonkit",
-  description: "Toonkit examples and workflows - Real-world use cases, integrations, and best practices for implementing TOON format.",
+  title: "TOON JavaScript Examples and Integrations - Toonkit2",
+  description:
+    "Explore Toonkit2 examples for JSON to TOON conversion, TOON parsing, typed rows, tagged templates, API payloads, and Express, Fastify, Hono, and Next.js integrations.",
   keywords: SEO_KEYWORDS,
   other: {
     "seo-descriptors": SEO_DESCRIPTORS.join(" | "),

@@ -101,6 +101,13 @@ async function main() {
     {
       name: 'core parser handles primitives and arrays',
       fn: async () => {
+        assert.equal(core.safeParse('{"ok":true}').ok, true);
+        assert.equal(core.safeParse('plain text'), 'plain text');
+        assert.equal(typeof core.toon, 'function');
+        assert.equal(typeof core.toon.toToon, 'function');
+        assert.equal(typeof core.toon.toJSON, 'function');
+        assert.equal(typeof core.toon.clone, 'function');
+        assert.equal(typeof core.toon.equals, 'function');
         assert.deepEqual(core.toonToJson('name[1]{0:s}:\nToon\n'), { name: 'Toon' });
         assert.deepEqual(core.toonToJson(`number[1]{0:n}:
 36.7
@@ -162,6 +169,7 @@ employees[2]{id:n,name:s,salary:n,active:b}:
         employees.push({ id: 3, name: 'Manoj', salary, active: true });
         assert.match(employees.toToon(), /employees\[3\]\{id:n,name:s,salary:n,active:b\}/);
         assert.match(employees.toToon(), /3,Manoj,100000,true/);
+        assert.deepEqual(employees.toJSON(), employees);
         assert.equal(employees instanceof Array, true);
         assert.deepEqual(employees.map((employee) => employee.name), ['Riya', 'John', 'Manoj']);
         assert.equal(employees.find((employee) => employee.id === 2).name, 'John');
@@ -233,6 +241,26 @@ active: true
       },
     },
     {
+      name: 'fetch client configuration helpers work',
+      fn: async () => {
+        const configured = fetchMod.configureToonFetch({
+          baseURL: 'https://example.test',
+          token: 'abc',
+          headers: { 'x-client': 'test' },
+        });
+        assert.equal(configured.defaults.baseURL, 'https://example.test');
+        assert.equal(configured.defaults.headers.common.Authorization, 'Bearer abc');
+        assert.equal(configured.defaults.headers.common['x-client'], 'test');
+
+        const isolated = fetchMod.createToonAxios({
+          baseURL: 'https://isolated.test',
+          token: 'xyz',
+        });
+        assert.equal(isolated.defaults.baseURL, 'https://isolated.test');
+        assert.equal(isolated.defaults.headers.common.Authorization, 'Bearer xyz');
+      },
+    },
+    {
       name: 'fetch client serializes documented request formats',
       fn: async () => {
         const originalAdapter = fetchMod.toonAxios.defaults.adapter;
@@ -267,6 +295,31 @@ active: true
         } finally {
           fetchMod.toonAxios.defaults.adapter = originalAdapter;
         }
+      },
+    },
+    {
+      name: 'documented adapter helper exports and formats work',
+      fn: async () => {
+        assert.equal(isFn(expressMod.toon), true);
+        assert.equal(isFn(expressMod.createCompressionMiddleware), true);
+        assert.equal(isFn(expressMod.createTextMiddleware), true);
+        assert.equal(expressMod.createCompressionMiddleware(false), null);
+        assert.equal(expressMod.createTextMiddleware(false), null);
+        assert.equal(Array.isArray(expressMod.toon({ compression: false, text: false })), true);
+
+        const fastify = makeFastifyStub();
+        await fastifyMod.toon(fastify);
+        let parsedFastify;
+        fastify.parserHandler({}, 'item[1]{0:n}:\n42\n', (_error, value) => {
+          parsedFastify = value;
+        });
+        assert.deepEqual(parsedFastify, { item: 42 });
+
+        const honoJson = makeHonoContext('{"ok":true}');
+        await honoMod.toon()(honoJson, async () => {});
+        assert.deepEqual(await honoJson.req.toon(), { ok: true });
+        const honoResponse = honoJson.toon('already toon');
+        assert.equal(await honoResponse.text(), 'already toon');
       },
     },
     {
@@ -332,6 +385,17 @@ active: true
         });
 
         assert.deepEqual(await nextServerMod.parseToonRequest(toonRequest), { hello: 'world' });
+
+        const jsonRequest = new Request('https://example.test', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: '{"hello":"json"}',
+        });
+        assert.deepEqual(await nextServerMod.parseToonRequest(jsonRequest), { hello: 'json' });
+        assert.equal(
+          await nextServerMod.ToonResponse.toon('raw').text(),
+          '0[1]{0:s}:\nr\n1[1]{0:s}:\na\n2[1]{0:s}:\nw'
+        );
       },
     },
   ];
