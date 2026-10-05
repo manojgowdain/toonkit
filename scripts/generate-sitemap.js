@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const docsSections = require('../src/app/docs/sections.json');
 
 const domains = [
   'https://toonkit.js.org',
@@ -9,6 +10,7 @@ const domains = [
 const pages = [
   '',
   '/docs',
+  ...docsSections.map(({ slug }) => `/docs/${slug}`),
   '/playground',
   '/api-simulator',
   '/developer',

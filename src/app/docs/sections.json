@@ -1,0 +1,19 @@
+[
+  {"slug":"overview","id":"intro","label":"Overview","title":"What is toonkit2?","description":"Understand TOON and the official toonkit2 toolkit."},
+  {"slug":"installation","id":"install","label":"Installation","title":"Installation","description":"Install the official toonkit2 package with npm, yarn, or pnpm."},
+  {"slug":"imports-and-functions","id":"import","label":"Import & Functions","title":"Import & Functions","description":"Import the core parser, serializer, runtime, and adapters."},
+  {"slug":"toon-runtime","id":"runtime","label":"TOON Runtime","title":"TOON Runtime","description":"Use tagged templates and mutation-aware runtime values."},
+  {"slug":"toon-to-json","id":"toon-to-json","label":"toonToJson()","title":"toonToJson()","description":"Parse TOON text into JavaScript values."},
+  {"slug":"json-to-toon","id":"jsontoon","label":"jsonToToon()","title":"jsonToToon()","description":"Serialize JavaScript objects and arrays into compact TOON."},
+  {"slug":"toon-data-types","id":"toon-data-types","label":"TOON Data Types","title":"TOON Data Types","description":"Use TOON string, number, boolean, null, object, array, and text types."},
+  {"slug":"helper-functions","id":"helpers","label":"Helper Functions","title":"Helper Functions","description":"Use safeParse, clone, equals, and serialization helpers."},
+  {"slug":"core-and-frontend","id":"core-frontend","label":"Core / Frontend","title":"Core parser & Frontend usage","description":"Use the core parser and TOON in browser applications."},
+  {"slug":"fetch-client","id":"fetch","label":"Fetch / Client","title":"Fetch client","description":"Send and receive TOON with toonFetch and Axios helpers."},
+  {"slug":"express-example","id":"express","label":"Express Example","title":"Express Example","description":"Build an Express API using TOON payloads."},
+  {"slug":"express-plugin","id":"express-plugin","label":"Express Plugin","title":"Express plugin","description":"Register toonkit2 middleware in Express."},
+  {"slug":"fastify-plugin","id":"fastify","label":"Fastify Plugin","title":"Fastify Integration","description":"Register the toonkit2 Fastify plugin."},
+  {"slug":"hono-plugin","id":"hono","label":"Hono Plugin","title":"Hono Integration","description":"Add TOON request and response helpers to Hono."},
+  {"slug":"nextjs-server","id":"next-server","label":"Next.js Server","title":"Next.js (Edge/Server)","description":"Parse and return TOON in Next.js route handlers."},
+  {"slug":"postman-testing","id":"postman","label":"Postman Testing","title":"Postman Testing","description":"Test TOON API requests with Postman."},
+  {"slug":"performance","id":"performance","label":"Performance","title":"Performance","description":"Understand compact payload and parsing performance."}
+]

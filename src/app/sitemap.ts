@@ -1,5 +1,6 @@
 export const dynamic = "force-static";
 export const revalidate = 0;
+import { DOCS_SECTIONS } from "./docs/sections";
 
 export default function sitemap() {
   const domains = [
@@ -9,6 +10,7 @@ export default function sitemap() {
   const pages = [
     "",
     "/docs",
+    ...DOCS_SECTIONS.map(({ slug }) => `/docs/${slug}`),
     "/playground",
     "/api-simulator",
     "/developer",

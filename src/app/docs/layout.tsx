@@ -6,6 +6,13 @@ export const metadata: Metadata = {
   description:
     "Official Toonkit2 documentation for the TOON data format, JSON to TOON conversion, TOON to JSON parsing, data types, helper functions, runtime APIs, and JavaScript framework integrations.",
   keywords: SEO_KEYWORDS,
+  alternates: {
+    canonical: "https://toonkit.js.org/docs",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
   other: {
     "seo-descriptors": SEO_DESCRIPTORS.join(" | "),
   },

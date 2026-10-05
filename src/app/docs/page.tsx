@@ -1,5 +1,7 @@
 "use client";
 import { useState, MouseEvent } from "react";
+import Link from "next/link";
+import { DOCS_SECTIONS } from "./sections";
 
 interface NavItem {
   id: string;
@@ -374,25 +376,7 @@ const globalStyles = `
   h1, h2, h3, h4 { font-family: 'Syne', sans-serif; }
 `;
 
-const navItems: NavItem[] = [
-  { id: "intro", label: "Overview" },
-  { id: "install", label: "Installation" },
-  { id: "import", label: "Import & Functions" },
-  { id: "runtime", label: "TOON Runtime" },
-  { id: "toon-to-json", label: "toonToJson()" },
-  { id: "jsontoon", label: "jsonToToon()" },
-  { id: "toon-data-types", label: "TOON Data Types" },
-  { id: "helpers", label: "Helper Functions" },
-  { id: "core-frontend", label: "Core / Frontend" },
-  { id: "fetch", label: "Fetch / Client" },
-  { id: "express", label: "Express Example" },
-  { id: "express-plugin", label: "Express Plugin" },
-  { id: "fastify", label: "Fastify Plugin" },
-  { id: "hono", label: "Hono Plugin" },
-  { id: "next-server", label: "Next.js Server" },
-  { id: "postman", label: "Postman Testing" },
-  { id: "performance", label: "Performance" },
-];
+const navItems: NavItem[] = DOCS_SECTIONS.map(({ id, label }) => ({ id, label }));
 
 function SectionHeader({ id, icon, title, subtitle }: SectionHeaderProps) {
   return (
@@ -571,15 +555,34 @@ function PropTable({ rows }: PropTableProps) {
   );
 }
 
-export default function ToonkitDocs() {
-  const [activeSection, setActiveSection] = useState("intro");
+function DocSection({
+  id,
+  slug,
+  active,
+  children,
+}: {
+  id: string;
+  slug: string;
+  active?: string;
+  children: React.ReactNode;
+}) {
+  if (active && active !== slug) return null;
+  return (
+    <section id={id} className="section-anim" style={{ marginBottom: 64 }}>
+      {children}
+    </section>
+  );
+}
+
+export default function ToonkitDocs({ sectionSlug }: { sectionSlug?: string } = {}) {
+  const currentIndex = sectionSlug
+    ? DOCS_SECTIONS.findIndex((section) => section.slug === sectionSlug)
+    : -1;
+  const activeSection = sectionSlug
+    ? DOCS_SECTIONS[currentIndex]?.id ?? "intro"
+    : "intro";
   const [tabImport, setTabImport] = useState("esm");
   const [tabExample, setTabExample] = useState("toon");
-
-  const scrollTo = (id: any) => {
-    setActiveSection(id);
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
 
   return (
     <>
@@ -632,15 +635,18 @@ export default function ToonkitDocs() {
             Documentation
           </div>
           <nav className="docs-sidebar-nav">
-            {navItems.map((item) => (
-              <span
+            {navItems.map((item) => {
+              const section = DOCS_SECTIONS.find((entry) => entry.id === item.id)!;
+              return (
+              <Link
                 key={item.id}
+                href={`/docs/${section.slug}`}
                 className={`nav-link ${activeSection === item.id ? "active" : ""}`}
-                onClick={() => scrollTo(item.id)}
               >
                 {item.label}
-              </span>
-            ))}
+              </Link>
+              );
+            })}
           </nav>
 
           <div className="docs-sidebar-links">
@@ -780,8 +786,42 @@ export default function ToonkitDocs() {
             </div>
           </div>
 
+          {sectionSlug && (
+            <div style={{ marginBottom: 32, color: theme.textDim, fontFamily: "'Space Mono', monospace", fontSize: 12 }}>
+              <Link href="/docs" style={{ color: theme.accent, textDecoration: "none" }}>Docs</Link>
+              {"  →  "}
+              {DOCS_SECTIONS[currentIndex]?.title}
+            </div>
+          )}
+
+          {!sectionSlug && (
+            <section style={{ marginBottom: 48 }}>
+              <h2 style={{ color: theme.text, fontSize: 24, marginBottom: 16 }}>Documentation sections</h2>
+              <div className="docs-grid-2">
+                {DOCS_SECTIONS.map((section) => (
+                  <Link
+                    key={section.slug}
+                    href={`/docs/${section.slug}`}
+                    style={{
+                      display: "block",
+                      padding: 18,
+                      border: `1px solid ${theme.border}`,
+                      borderRadius: 10,
+                      background: theme.surface,
+                      color: theme.text,
+                      textDecoration: "none",
+                    }}
+                  >
+                    <strong>{section.title}</strong>
+                    <div style={{ color: theme.textDim, fontSize: 13, marginTop: 6 }}>{section.description}</div>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
+
           {/* ── OVERVIEW ── */}
-          <section id="intro" className="section-anim" style={{ marginBottom: 64 }}>
+          <DocSection id="intro" slug="overview" active={sectionSlug}>
             <SectionHeader
               id="intro"
               icon="📦"
@@ -855,10 +895,10 @@ export default function ToonkitDocs() {
                 </div>
               ))}
             </div>
-          </section>
+          </DocSection>
 
           {/* ── INSTALLATION ── */}
-          <section id="install" className="section-anim" style={{ marginBottom: 64 }}>
+          <DocSection id="install" slug="installation" active={sectionSlug}>
             <SectionHeader id="install" icon="📥" title="Installation" />
 
             <CodeBlock label="npm">{`<span class="fn">npm</span> install toonkit2`}</CodeBlock>
@@ -869,10 +909,10 @@ export default function ToonkitDocs() {
               old legacy package name. <code>toonkit2</code> is the official
               recommended package for all new applications.
             </p>
-          </section>
+          </DocSection>
 
           {/* ── IMPORT & FUNCTIONS ── */}
-          <section id="import" className="section-anim" style={{ marginBottom: 64 }}>
+          <DocSection id="import" slug="imports-and-functions" active={sectionSlug}>
             <SectionHeader id="import" icon="🔗" title="Import & Functions" />
 
             <div className="docs-tab-row">
@@ -964,10 +1004,10 @@ export default function ToonkitDocs() {
                 </div>
               ))}
             </div>
-          </section>
+          </DocSection>
 
           {/* ── TOON RUNTIME ── */}
-          <section id="runtime" className="section-anim" style={{ marginBottom: 64 }}>
+          <DocSection id="runtime" slug="toon-runtime" active={sectionSlug}>
             <SectionHeader
               id="runtime"
               icon="⚡"
@@ -998,10 +1038,10 @@ employees.push({ id: 3, name: "Manoj", salary: 100000, active: true });
 <span class="fn">toon</span>.toJSON(employees);
 <span class="fn">toon</span>.clone(employees);
 <span class="fn">toon</span>.equals(a, b);`}</CodeBlock>
-          </section>
+          </DocSection>
 
           {/* ── HELPER FUNCTIONS ── */}
-          <section id="helpers" className="section-anim" style={{ marginBottom: 64 }}>
+          <DocSection id="helpers" slug="helper-functions" active={sectionSlug}>
             <SectionHeader
               id="helpers"
               icon="🧰"
@@ -1069,10 +1109,10 @@ copy[0].salary = 1;`,
                 <CodeBlock label={helper.title}>{helper.example}</CodeBlock>
               </div>
             ))}
-          </section>
+          </DocSection>
 
           {/* ── toonToJson ── */}
-          <section id="toon-to-json" className="section-anim" style={{ marginBottom: 64 }}>
+          <DocSection id="toon-to-json" slug="toon-to-json" active={sectionSlug}>
             <SectionHeader
               id="toon-to-json"
               icon="🔄"
@@ -1160,10 +1200,10 @@ true
   <span class="str">tags</span>: [<span class="str">"iot"</span>, <span class="str">"health"</span>, <span class="str">"tracker"</span>],
   <span class="str">created_at</span>: <span class="str">"03042026120000"</span>
 }`}</CodeBlock>
-          </section>
+          </DocSection>
 
           {/* ── jsonToToon ── */}
-          <section id="jsontoon" className="section-anim" style={{ marginBottom: 64 }}>
+          <DocSection id="jsontoon" slug="json-to-toon" active={sectionSlug}>
             <SectionHeader
               id="jsontoon"
               icon="🔄"
@@ -1245,10 +1285,10 @@ true
 
 <span class="toon-key">tags</span>[<span class="num">1</span>]{<span class="num">0</span>:<span class="toon-type">a</span>}:
 <span class="toon-val">["iot","health","tracker"]</span>`}</CodeBlock>
-          </section>
+          </DocSection>
 
           {/* ── TYPE CODES ── */}
-          <section id="toon-data-types" className="section-anim" style={{ marginBottom: 64 }}>
+          <DocSection id="toon-data-types" slug="toon-data-types" active={sectionSlug}>
             <SectionHeader
               id="toon-data-types"
               icon="🧬"
@@ -1319,10 +1359,10 @@ true
                 </div>
               ))}
             </div>
-          </section>
+          </DocSection>
 
           {/* ── EXPRESS ── */}
-          <section id="express" className="section-anim" style={{ marginBottom: 64 }}>
+          <DocSection id="express" slug="express-example" active={sectionSlug}>
             <SectionHeader
               id="express"
               icon="🖥"
@@ -1464,12 +1504,12 @@ app.<span class="fn">listen</span>(<span class="num">3000</span>);</span>`}</Cod
               before your routes. Without this,{" "}
               <code style={{ fontFamily: "'Space Mono', monospace" }}>req.body</code> will be empty.
             </InfoCard>
-          </section>
+          </DocSection>
 
           {/* ── POSTMAN ── */}
 
           {/* ── CORE PARSER & FRONTEND ── */}
-          <section id="core-frontend" className="section-anim" style={{ marginBottom: 64 }}>
+          <DocSection id="core-frontend" slug="core-and-frontend" active={sectionSlug}>
             <SectionHeader id="core-frontend" icon="🧭" title="Core parser & Frontend usage" subtitle="How the main parser works and using TOON in browsers" />
 
             <p style={{ fontSize: 14, color: theme.textDim, marginBottom: 12 }}>
@@ -1495,9 +1535,9 @@ app.<span class="fn">listen</span>(<span class="num">3000</span>);</span>`}</Cod
 
 <span class="kw">const</span> result = <span class="kw">await</span> <span class="fn">toonFetch</span>(<span class="str">"/api/devices"</span>);
 <span class="kw">const</span> data = result.data; <span class="comment">// already parsed</span>`}</CodeBlock>
-          </section>
+          </DocSection>
           {/* ── FETCH CLIENT ── */}
-          <section id="fetch" className="section-anim" style={{ marginBottom: 64 }}>
+          <DocSection id="fetch" slug="fetch-client" active={sectionSlug}>
             <SectionHeader id="fetch" icon="🌐" title="Fetch client" subtitle="`toonFetch`, `configureToonAxios`, and `createToonAxios` examples" />
 
             <p style={{ fontSize: 14, color: theme.textDim, marginBottom: 12 }}>
@@ -1604,10 +1644,10 @@ console.log(response.status);`}</CodeBlock>
 
   console.log(data);
 };`}</CodeBlock>
-          </section>
+          </DocSection>
 
           {/* ── FASTIFY ── */}
-          <section id="fastify" className="section-anim" style={{ marginBottom: 64 }}>
+          <DocSection id="fastify" slug="fastify-plugin" active={sectionSlug}>
             <SectionHeader id="fastify" icon="🚀" title="Fastify Integration" subtitle="Register plugin for request/response handling" />
 
             <p style={{ fontSize: 14, color: theme.textDim, marginBottom: 16, lineHeight: 1.7 }}>
@@ -1624,10 +1664,10 @@ app.<span class="fn">post</span>(<span class="str">"/devices"</span>, async (req
   <span class="kw">const</span> data = req.toon();
   reply.toon({ ok: <span class="kw">true</span>, received: data });
 });`}</CodeBlock>
-          </section>
+          </DocSection>
 
           {/* ── EXPRESS PLUGIN ── */}
-          <section id="express-plugin" className="section-anim" style={{ marginBottom: 64 }}>
+          <DocSection id="express-plugin" slug="express-plugin" active={sectionSlug}>
             <SectionHeader id="express-plugin" icon="🧩" title="Express plugin" subtitle="Register middleware for Express" />
 
             <p style={{ fontSize: 14, color: theme.textDim, marginBottom: 12 }}>
@@ -1645,10 +1685,10 @@ app.<span class="fn">post</span>(<span class="str">"/devices"</span>, (req, res)
   <span class="kw">const</span> data = req.toon();
   res.toon({ ok: <span class="kw">true</span>, received: data });
 });`}</CodeBlock>
-          </section>
+          </DocSection>
 
           {/* ── HONO ── */}
-          <section id="hono" className="section-anim" style={{ marginBottom: 64 }}>
+          <DocSection id="hono" slug="hono-plugin" active={sectionSlug}>
             <SectionHeader id="hono" icon="🔗" title="Hono Integration" subtitle="Middleware for Hono apps" />
 
             <p style={{ fontSize: 14, color: theme.textDim, marginBottom: 16, lineHeight: 1.7 }}>
@@ -1662,10 +1702,10 @@ app.<span class="fn">post</span>(<span class="str">"/devices"</span>, (req, res)
 app.use(<span class="str">"*"</span>, <span class="fn">toon</span>());
 
 app.post(<span class="str">"/devices"</span>, (c) =&gt; c.json({ ok: <span class="kw">true</span>, received: c.req.toon() }));`}</CodeBlock>
-          </section>
+          </DocSection>
 
           {/* ── NEXT (server) ── */}
-          <section id="next-server" className="section-anim" style={{ marginBottom: 64 }}>
+          <DocSection id="next-server" slug="nextjs-server" active={sectionSlug}>
             <SectionHeader id="next-server" icon="⚙️" title="Next.js (Edge/Server)" subtitle="Parsing TOON in route handlers" />
 
             <p style={{ fontSize: 14, color: theme.textDim, marginBottom: 16, lineHeight: 1.7 }}>
@@ -1678,8 +1718,8 @@ export async function POST(req) {
   <span class="kw">const</span> body = await <span class="fn">parseToonRequest</span>(req);
   <span class="kw">return</span> <span class="fn">ToonResponse</span>.toon({ ok: <span class="kw">true</span>, received: body });
 }`}</CodeBlock>
-          </section>
-          <section id="postman" className="section-anim" style={{ marginBottom: 64 }}>
+          </DocSection>
+          <DocSection id="postman" slug="postman-testing" active={sectionSlug}>
             <SectionHeader
               id="postman"
               icon="🧪"
@@ -1769,10 +1809,10 @@ export async function POST(req) {
 
 <span class="toon-key">is_active</span>[<span class="num">1</span>]{<span class="num">0</span>:<span class="toon-type">b</span>}:
 <span class="toon-val">true</span>`}</CodeBlock>
-          </section>
+          </DocSection>
 
           {/* ── PERFORMANCE ── */}
-          <section id="performance" className="section-anim" style={{ marginBottom: 64 }}>
+          <DocSection id="performance" slug="performance" active={sectionSlug}>
             <SectionHeader
               id="performance"
               icon="⚡"
@@ -1964,7 +2004,31 @@ export async function POST(req) {
                 </a>
               </div>
             </div>
-          </section>
+          </DocSection>
+          {sectionSlug && (
+            <nav
+              aria-label="Documentation pagination"
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                gap: 16,
+                marginTop: 24,
+                paddingTop: 24,
+                borderTop: `1px solid ${theme.border}`,
+              }}
+            >
+              {currentIndex > 0 ? (
+                <Link href={`/docs/${DOCS_SECTIONS[currentIndex - 1].slug}`} style={{ color: theme.accent, textDecoration: "none" }}>
+                  ← {DOCS_SECTIONS[currentIndex - 1].title}
+                </Link>
+              ) : <span />}
+              {currentIndex < DOCS_SECTIONS.length - 1 ? (
+                <Link href={`/docs/${DOCS_SECTIONS[currentIndex + 1].slug}`} style={{ color: theme.accent, textDecoration: "none", textAlign: "right" }}>
+                  {DOCS_SECTIONS[currentIndex + 1].title} →
+                </Link>
+              ) : <span />}
+            </nav>
+          )}
         </main>
       </div>
     </>
