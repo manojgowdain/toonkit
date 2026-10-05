@@ -43,6 +43,16 @@ The package also exposes adapter subpaths:
 npm install toonkit2
 ```
 
+Use the current release when upgrading an existing project:
+
+```bash
+npm install toonkit2@latest
+```
+
+If `value.toJSON` is undefined, the project is using an older cached or
+lockfile-pinned release. Check it with `npm ls toonkit2` and update to the
+latest `toonkit2` version.
+
 ## Core format
 
 TOON uses block headers like `key[count]{schema}:`.

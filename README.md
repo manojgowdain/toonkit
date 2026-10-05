@@ -21,6 +21,14 @@ npm install toonkit2
 `toonkit` is the legacy package name. See the
 [official documentation](https://toonkit.js.org/docs) for migration guidance.
 
+If an existing project reports that `value.toJSON` is undefined, update its
+lockfile-pinned dependency:
+
+```bash
+npm install toonkit2@latest
+npm ls toonkit2
+```
+
 ## Run the documentation site locally
 
 This website uses Next.js static export for GitHub Pages. Build the site and
