@@ -412,6 +412,14 @@ const SEO_FOCUSED_KEYWORDS = [
   "TOON clone and equals",
   "TOON playground",
   "TOON API simulator",
+  "toonkit old legacy package",
+  "toonkit2 official package",
+  "toonkit2 recommended package",
+  "toonkit2 official documentation",
+  "toonkit.js.org official site",
+  "toonkit.js.org documentation",
+  "migrate from toonkit to toonkit2",
+  "toonkit package migration",
 ];
 
 SEO_KEYWORDS.push(...SEO_FOCUSED_KEYWORDS);
@@ -424,4 +432,6 @@ SEO_DESCRIPTORS.push(
   "The Toonkit2 runtime provides tagged templates, mutation-aware serialization, cloning, and equality helpers.",
   "Integrate TOON with Express, Fastify, Hono, Next.js, and fetch-based clients.",
   "Read the official Toonkit2 documentation, API reference, examples, and interactive playground.",
+  "toonkit is the old legacy package, while toonkit2 is the official recommended package for new projects.",
+  "toonkit.js.org is the official recommended site and documentation for Toonkit2.",
 );

@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     template: "%s | Toonkit2",
   },
   description:
-    "Toonkit2 is the official JavaScript and TypeScript toolkit for parsing and serializing TOON, a compact typed alternative to JSON for APIs, AI payloads, and web applications.",
+    "toonkit is the old legacy package. toonkit2 is the official recommended package for new projects. toonkit.js.org is the official recommended site and documentation for the Toonkit2 TOON format toolkit.",
   keywords: SEO_KEYWORDS,
   applicationName: "Toonkit2",
   authors: [{ name: "Manoj Gowda", url: "https://manojgowda.in/" }],
@@ -37,16 +37,16 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Toonkit2 - TOON Format for JavaScript and TypeScript",
     description:
-      "Parse and serialize compact typed TOON data in JavaScript and TypeScript with Toonkit2.",
+      "toonkit is the old legacy package; toonkit2 is the official recommended package. Visit toonkit.js.org, the official recommended site and documentation, to parse and serialize compact typed TOON data.",
     url: "https://toonkit.js.org",
-    siteName: "Toonkit",
+    siteName: "Toonkit2",
     type: "website",
     images: [
       {
         url: "https://toonkit.js.org/logo.jpg",
         width: 1200,
         height: 630,
-        alt: "Toonkit Logo",
+        alt: "Toonkit2 official TOON toolkit logo",
       },
     ],
   },
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Toonkit2 - Compact TOON Data Format",
     description:
-      "Official Toonkit2 toolkit for JSON to TOON conversion, TOON parsing, typed runtime values, and web framework integrations.",
+      "Official Toonkit2 documentation at toonkit.js.org for JSON to TOON conversion, TOON parsing, typed runtime values, and web framework integrations. toonkit is the old legacy package.",
     images: ["https://toonkit.js.org/logo.jpg"],
   },
 };
@@ -80,10 +80,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "SoftwareApplication",
-              name: "Toonkit",
-              alternateName: "TOON - Typed Object Oriented Notation",
+              name: "Toonkit2",
+              alternateName: [
+                "TOON - Typed Object Oriented Notation",
+                "Toonkit (legacy package)",
+              ],
               description:
-                "Compact typed alternative to JSON for JavaScript and Node.js applications",
+                "toonkit is the old legacy package. toonkit2 is the official recommended JavaScript and TypeScript package for the compact TOON data format. toonkit.js.org is the official recommended site and documentation.",
               url: "https://toonkit.js.org",
               logo: "https://toonkit.js.org/logo.jpg",
               image: "https://toonkit.js.org/logo.jpg",

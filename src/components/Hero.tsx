@@ -43,7 +43,7 @@ export default function Hero() {
               },
             }}
           >
-            toonkit
+            toonkit2
           </Typography>
 
           <Typography
@@ -118,12 +118,12 @@ export default function Hero() {
             </Typography>
 
             <Typography sx={{ lineHeight: 1.85, color: "text.secondary" }}>
-              My <strong>toonkit</strong>: Schema once (table-style), type codes ({" "}
+              My <strong>toonkit2</strong>: Schema once (table-style), type codes ({" "}
               <Box component="span" sx={{ fontFamily: "monospace" }}>
                 s→string, n→number, b→boolean
               </Box>
               ), then infinite rows. Shrinks to 90 bytes. <strong>toon</strong> is the format.
-              <strong>toonkit</strong> is my battle-tested npm lib that parses it to typed JS objects
+              <strong>toonkit2</strong> is my battle-tested major-update npm lib that parses it to typed JS objects
               instantly. JSON repeats; we don&apos;t.
             </Typography>
 
@@ -182,6 +182,13 @@ export default function Hero() {
           <Box component="code" sx={{ fontFamily: "inherit" }}>
           npm i <strong>toonkit2</strong>
           </Box>
+          <Typography
+            variant="body2"
+            sx={{ mt: 1.5, color: "text.secondary", maxWidth: 680, mx: "auto" }}
+          >
+            Major update: <strong>toonkit</strong> is the old legacy package name.
+            <strong> toonkit2</strong> is the official recommended package for new projects.
+          </Typography>
         </Box>
 
         {/* External Links */}

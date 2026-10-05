@@ -22,13 +22,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!page) {
     return {
-      title: "SEO Page Not Found - Toonkit",
+      title: "SEO Page Not Found - Toonkit2",
       description: "The requested SEO page could not be found.",
     };
   }
 
   return {
-    title: `${page.title} - Toonkit`,
+    title: `${page.title} - Toonkit2`,
     description: page.description,
     keywords: [...SEO_KEYWORDS, page.focusKeyword],
     other: {

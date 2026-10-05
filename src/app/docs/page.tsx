@@ -758,7 +758,7 @@ export default function ToonkitDocs() {
                 WebkitTextFillColor: "transparent",
               }}
             >
-              toonkit
+              toonkit2
             </h1>
             <p
               style={{
@@ -785,11 +785,11 @@ export default function ToonkitDocs() {
             <SectionHeader
               id="intro"
               icon="📦"
-              title="What is toonkit?"
+              title="What is toonkit2?"
               subtitle="Why TOON? Why this library?"
             />
             <p style={{ fontSize: 15, color: theme.textDim, lineHeight: 1.8, marginBottom: 20 }}>
-              <strong style={{ color: theme.text }}>toonkit</strong> provides a core parser/serializer
+              <strong style={{ color: theme.text }}>toonkit2</strong> provides the official major-update core parser/serializer
               and framework adapters for easy integration with HTTP clients and servers.
             </p>
             <ul style={{ fontSize: 15, color: theme.textDim, lineHeight: 1.8, marginBottom: 24, paddingLeft: 20 }}>
@@ -864,6 +864,11 @@ export default function ToonkitDocs() {
             <CodeBlock label="npm">{`<span class="fn">npm</span> install toonkit2`}</CodeBlock>
             <CodeBlock label="yarn">{`<span class="fn">yarn</span> add toonkit2`}</CodeBlock>
             <CodeBlock label="pnpm">{`<span class="fn">pnpm</span> add toonkit2`}</CodeBlock>
+            <p style={{ color: theme.textDim, lineHeight: 1.7, marginTop: 16 }}>
+              <strong>Major package update:</strong> <code>toonkit</code> is the
+              old legacy package name. <code>toonkit2</code> is the official
+              recommended package for all new applications.
+            </p>
           </section>
 
           {/* ── IMPORT & FUNCTIONS ── */}
@@ -1322,11 +1327,11 @@ true
               id="express"
               icon="🖥"
               title="Express.js Integration"
-              subtitle="Using toonkit in Node.js / Express APIs"
+              subtitle="Using toonkit2 in Node.js / Express APIs"
             />
 
             <p style={{ fontSize: 14, color: theme.textDim, marginBottom: 20, lineHeight: 1.7 }}>
-              toonkit works seamlessly with Express. Use{" "}
+              toonkit2 works seamlessly with Express. Use{" "}
               <code style={{ color: theme.accent, fontFamily: "'Space Mono', monospace" }}>
                 express.text()
               </code>{" "}

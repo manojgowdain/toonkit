@@ -21,6 +21,19 @@ npm install toonkit2
 `toonkit` is the legacy package name. See the
 [official documentation](https://toonkit.js.org/docs) for migration guidance.
 
+## Run the documentation site locally
+
+This website uses Next.js static export for GitHub Pages. Build the site and
+serve the generated `out` directory:
+
+```bash
+npm run build
+npm start
+```
+
+The `start` script uses `serve` because `next start` only works with a
+Next.js server deployment and is incompatible with `output: "export"`.
+
 This repository’s publishable library is the package under [toonjs](./toonjs), and the package name is now `toonkit2`.
 
 ## Exports
