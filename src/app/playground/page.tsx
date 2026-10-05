@@ -617,6 +617,66 @@ const EXAMPLES = [
     value: `sample[1]{age:n,name:s,active:b,data:j,tags:a,value:nl}:\n25,Manoj,true,{"x":1},["a","b"],null`,
   },
   {
+    label: "Strings",
+    type: "json" as const,
+    value: JSON.stringify({
+      greeting: "Hello, TOON!",
+      sentence: "Commas, quotes, and spaces stay intact",
+      empty: "",
+    }, null, 2),
+  },
+  {
+    label: "Numbers",
+    type: "json" as const,
+    value: JSON.stringify({
+      integer: 42,
+      decimal: 98.6,
+      negative: -12,
+      zero: 0,
+    }, null, 2),
+  },
+  {
+    label: "Booleans + null",
+    type: "json" as const,
+    value: JSON.stringify({
+      enabled: true,
+      archived: false,
+      missing: null,
+    }, null, 2),
+  },
+  {
+    label: "Nested object",
+    type: "json" as const,
+    value: JSON.stringify({
+      user: {
+        id: 7,
+        profile: {
+          name: "Ava",
+          location: "Bengaluru, India",
+        },
+      },
+    }, null, 2),
+  },
+  {
+    label: "Nested arrays",
+    type: "json" as const,
+    value: JSON.stringify({
+      tags: ["toon", "json", "fast"],
+      matrix: [[1, 2], [3, 4]],
+      records: [{ id: 1, values: ["a,b", "c"] }],
+    }, null, 2),
+  },
+  {
+    label: "Timestamp",
+    type: "toon" as const,
+    value: `created_at[1]{0:td}:\n2026-10-05T12:00:00Z`,
+  },
+  {
+    label: "Typed row",
+    type: "toon" as const,
+    value: `records[2]{name:s,score:n,active:b,meta:j,tags:a,value:nl,created:td}:\n"Ava, Rao",98.5,true,{"team":"platform"},["api","toon"],null,2026-10-05T12:00:00Z\n"Leo",87,false,{"team":"web"},["docs","ui"],null,2026-10-04T09:30:00Z`,
+  },
+  {
     label: "Multi-resource",
     type: "toon" as const,
     value: `meta{page:n,limit:n,total:n}:\n1,10,200\n\nemployees[2]{id:n,name:s,salary:n}:\n1,Riya,90000\n2,John,80000`,
@@ -652,56 +712,12 @@ export default function Playground() {
     const t0 = performance.now();
 
     try {
-      let outputText = "";
-
-      if (detectedType === "json") {
-        // Try server API first (works on Vercel/dev). If it fails (e.g. GitHub Pages), fallback to in-browser conversion.
-        try {
-          const res = await fetch("/api/toon/send", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: input,
-          });
-          if (res.ok) {
-            outputText = await res.text();
-          } else {
-            // server returned error; fallthrough to local conversion
-            throw new Error(await res.text());
-          }
-        } catch (e) {
-          // Fallback: convert in-browser using the `toonkit2` package
-          try {
-            const obj = JSON.parse(input);
-            outputText = jsonToToon(obj);
-          } catch (err) {
-            throw new Error("Local JSON→TOON conversion failed: " + (err instanceof Error ? err.message : String(err)));
-          }
-        }
-      } else {
-        // TOON → JSON: try server API first
-        try {
-          const res = await fetch("/api/toon/receive", {
-            method: "POST",
-            headers: { "Content-Type": "text/plain" },
-            body: input,
-          });
-          if (res.ok) {
-            const json = await res.json();
-            outputText = JSON.stringify(json, null, 2);
-          } else {
-            const err = await res.json().catch(() => ({ error: "Parse failed" }));
-            throw new Error(err.error ?? "Parse failed");
-          }
-        } catch (e) {
-          // Fallback: parse in-browser using `toonkit2`
-          try {
-            const json = toonToJson(input);
-            outputText = JSON.stringify(json, null, 2);
-          } catch (err) {
-            throw new Error("Local TOON→JSON conversion failed: " + (err instanceof Error ? err.message : String(err)));
-          }
-        }
-      }
+      // Keep the playground fully static-host compatible: conversion happens in
+      // the browser instead of depending on Next.js API routes.
+      const outputText =
+        detectedType === "json"
+          ? jsonToToon(JSON.parse(input))
+          : JSON.stringify(toonToJson(input), null, 2);
 
       const durationMs = Math.round(performance.now() - t0);
       setOutput(outputText);
