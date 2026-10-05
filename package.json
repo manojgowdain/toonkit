@@ -18,7 +18,7 @@
     "next": "16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "toonkit": "^2.0.2"
+    "toonkit2": "^2.2.3"
   },
   "devDependencies": {
     "@types/node": "^20",

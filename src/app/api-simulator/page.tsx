@@ -39,7 +39,7 @@ departments[2]{id:s,title:s}:
 
 // ─── Code snippets ───
 const CODE_SNIPPETS: Record<string, string> = {
-  sendToon: `import { sendToon } from "toonkit";
+  sendToon: `import { sendToon } from "toonkit2";
 
 // Frontend: convert JSON → TOON, send to your backend
 const payload = sendToon({
@@ -56,7 +56,7 @@ await fetch("/api/toon/receive", {
 });
 // Backend parses it → returns JSON`,
 
-  receiveToon: `import { receiveToon } from "toonkit";
+  receiveToon: `import { receiveToon } from "toonkit2";
 
 // Frontend: send JSON to backend, receive TOON, parse it
 const res = await fetch("/api/toon/send", {
@@ -69,7 +69,7 @@ const toonText = await res.text();     // TOON string
 const data = receiveToon(toonText);    // → JSON object`,
 
   expressBackend: `const express = require("express");
-const { reqGetToon, resSendToon } = require("toonkit");
+const { reqGetToon, resSendToon } = require("toonkit2");
 
 const app = express();
 app.use(express.text());
@@ -91,7 +91,7 @@ app.listen(3000);`,
   nextjsSend: `// app/api/toon/send/route.ts
 // POST JSON body → returns TOON string
 
-import { sendToon } from "toonkit";
+import { sendToon } from "toonkit2";
 import { NextRequest } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -110,7 +110,7 @@ export async function POST(req: NextRequest) {
   nextjsReceive: `// app/api/toon/receive/route.ts
 // POST TOON body → returns parsed JSON
 
-import { receiveToon } from "toonkit";
+import { receiveToon } from "toonkit2";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {

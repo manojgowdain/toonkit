@@ -1,10 +1,8 @@
-# toonkit
-
-![npm](https://img.shields.io/npm/v/toonkit)
-![downloads](https://img.shields.io/npm/dw/toonkit)
-![license](https://img.shields.io/npm/l/toonkit)
+# toonkit2
 
 Typed Object Oriented Notation (TOON) parser, serializer, and adapter toolkit for JavaScript and TypeScript.
+
+This package is the released 2.x package name for the TOON toolkit.
 
 ## What it exports
 
@@ -20,16 +18,16 @@ The package root exports the core helpers plus the fetch client:
 
 The package also exposes adapter subpaths:
 
-- `toonkit/fetch`
-- `toonkit/express`
-- `toonkit/fastify`
-- `toonkit/hono`
-- `toonkit/next/server`
+- `toonkit2/fetch`
+- `toonkit2/express`
+- `toonkit2/fastify`
+- `toonkit2/hono`
+- `toonkit2/next/server`
 
 ## Install
 
 ```bash
-npm install toonkit
+npm install toonkit2
 ```
 
 ## Core format
@@ -50,6 +48,8 @@ employees[2]{id:n,name:s,active:b}:
 2,Noah,false
 ```
 
+Array and object fields are parsed deterministically by scanning nested brackets, braces, and quoted strings instead of splitting on raw commas.
+
 Supported type codes in the current implementation:
 
 | Code | Meaning | Parse behavior |
@@ -69,15 +69,15 @@ Supported type codes in the current implementation:
 Parses TOON text into a JavaScript object.
 
 ```js
-import { toonToJson } from "toonkit";
+import { toonToJson } from "toonkit2";
 
 const data = toonToJson(`device_id[1]{0:s}:\nDEVICE_PRO_01\n`);
 ```
 
 Notes:
 
-- Single values use the `{0:type}` schema form.
-- Arrays of objects are parsed row by row using comma-separated values.
+- Single values use the `{0:type}` form.
+- Arrays of objects are parsed row by row using a deterministic top-level splitter, so commas inside nested arrays, objects, or quoted strings stay intact.
 - `j` and `a` fields should contain valid JSON text.
 
 ### `jsonToToon(obj: any)`
@@ -85,7 +85,7 @@ Notes:
 Serializes a JavaScript object into TOON text.
 
 ```js
-import { jsonToToon } from "toonkit";
+import { jsonToToon } from "toonkit2";
 
 const toon = jsonToToon({
   device_id: "DEVICE_PRO_01",
@@ -98,7 +98,7 @@ Notes:
 
 - Primitive values are emitted as `key[1]{0:type}:` blocks.
 - Arrays of objects are emitted as schema blocks using the keys from the first item.
-- Complex values inside row arrays are stringified with normal JavaScript coercion, so keep row fields primitive or pre-stringify them.
+- Nested array and object values are emitted as JSON text.
 
 ### `safeParse(val: string)`
 
@@ -122,7 +122,7 @@ Returns:
 Example:
 
 ```js
-import { toonFetch } from "toonkit";
+import { toonFetch } from "toonkit2";
 
 const result = await toonFetch("http://localhost:3000/users", {
   method: "POST",
@@ -150,7 +150,7 @@ The shared axios instance used internally by `toonFetch`.
 
 ## Express
 
-Import from `toonkit/express`.
+Import from `toonkit2/express`.
 
 Available exports:
 
@@ -164,7 +164,7 @@ Available exports:
 
 ```js
 import express from "express";
-import { toon } from "toonkit/express";
+import { toon } from "toonkit2/express";
 
 const app = express();
 app.use(...toon());
@@ -183,7 +183,7 @@ What the adapter does:
 
 ## Fastify
 
-Import from `toonkit/fastify`.
+Import from `toonkit2/fastify`.
 
 Available exports:
 
@@ -193,7 +193,7 @@ Available exports:
 
 ```js
 import Fastify from "fastify";
-import { toon } from "toonkit/fastify";
+import { toon } from "toonkit2/fastify";
 
 const fastify = Fastify();
 await fastify.register(toon);
@@ -211,7 +211,7 @@ What the adapter does:
 
 ## Hono
 
-Import from `toonkit/hono`.
+Import from `toonkit2/hono`.
 
 Available exports:
 
@@ -221,7 +221,7 @@ Available exports:
 
 ```ts
 import { Hono } from "hono";
-import { toon } from "toonkit/hono";
+import { toon } from "toonkit2/hono";
 
 const app = new Hono();
 app.use("*", toon());
@@ -239,7 +239,7 @@ What the adapter does:
 
 ## Next.js
 
-Import from `toonkit/next/server`.
+Import from `toonkit2/next/server`.
 
 Available exports:
 
@@ -248,7 +248,7 @@ Available exports:
 
 ```ts
 import { NextRequest } from "next/server";
-import { ToonResponse, parseToonRequest } from "toonkit/next/server";
+import { ToonResponse, parseToonRequest } from "toonkit2/next/server";
 
 export async function POST(req: NextRequest) {
   const body = await parseToonRequest(req);
@@ -256,11 +256,9 @@ export async function POST(req: NextRequest) {
 }
 ```
 
-## Limitations to know
+## Migration note
 
-- `jsonToToon()` is optimized for flat objects and arrays of records.
-- Nested row values should be pre-stringified if you need them preserved exactly.
-- `toonToJson()` expects block headers in the `key[count]{schema}:` form.
+The package name is now `toonkit2`, while the TOON format itself remains the same. Existing payloads continue to work as long as they follow the documented `key[count]{schema}:` block format. The key difference is the package identity and the deterministic parsing behavior for array/object fields containing nested commas.
 
 ## Development
 

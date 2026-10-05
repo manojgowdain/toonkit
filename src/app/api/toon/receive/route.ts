@@ -1,4 +1,4 @@
-import { toonToJson } from "toonkit";
+import { toonToJson } from "toonkit2";
 import { NextRequest } from "next/server";
 
 export async function POST(req: NextRequest) {

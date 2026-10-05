@@ -1,11 +1,9 @@
 
-# toonkit
-
-![npm](https://img.shields.io/npm/v/toonkit)
-![downloads](https://img.shields.io/npm/dw/toonkit)
-![license](https://img.shields.io/npm/l/toonkit)
+# toonkit2
 
 TOON parser, serializer, and framework adapter toolkit for JavaScript and TypeScript.
+
+This repository’s publishable library is the package under [toonjs](./toonjs), and the package name is now `toonkit2`.
 
 ## Exports
 
@@ -21,21 +19,21 @@ Root exports:
 
 Subpath exports:
 
-- `toonkit/fetch`
-- `toonkit/express`
-- `toonkit/fastify`
-- `toonkit/hono`
-- `toonkit/next/server`
+- `toonkit2/fetch`
+- `toonkit2/express`
+- `toonkit2/fastify`
+- `toonkit2/hono`
+- `toonkit2/next/server`
 
 ## Install
 
 ```bash
-npm install toonkit
+npm install toonkit2
 ```
 
 ## Core format
 
-TOON uses headers like `key[count]{schema}:`.
+TOON uses block headers like `key[count]{schema}:`.
 
 ```text
 device_id[1]{0:s}:
@@ -48,6 +46,8 @@ employees[2]{id:n,name:s,active:b}:
 1,Ava,true
 2,Noah,false
 ```
+
+Array and object fields are parsed deterministically by scanning nested brackets, braces, and quoted strings instead of splitting raw commas.
 
 Supported type codes:
 
@@ -68,7 +68,7 @@ Supported type codes:
 Parses TOON text into a JavaScript object.
 
 ```js
-import { toonToJson } from "toonkit";
+import { toonToJson } from "toonkit2";
 
 const data = toonToJson(`device_id[1]{0:s}:\nDEVICE_PRO_01\n`);
 ```
@@ -78,7 +78,7 @@ const data = toonToJson(`device_id[1]{0:s}:\nDEVICE_PRO_01\n`);
 Serializes a JavaScript object into TOON text.
 
 ```js
-import { jsonToToon } from "toonkit";
+import { jsonToToon } from "toonkit2";
 
 const toon = jsonToToon({ device_id: "DEVICE_PRO_01", battery: 87 });
 ```
@@ -88,7 +88,7 @@ const toon = jsonToToon({ device_id: "DEVICE_PRO_01", battery: 87 });
 `toonFetch()` wraps axios with TOON-aware request and response handling.
 
 ```js
-import { toonFetch } from "toonkit";
+import { toonFetch } from "toonkit2";
 
 const result = await toonFetch("http://localhost:3000/users", {
   method: "POST",
@@ -98,11 +98,11 @@ const result = await toonFetch("http://localhost:3000/users", {
 
 ## Express
 
-Import from `toonkit/express`.
+Import from `toonkit2/express`.
 
 ```js
 import express from "express";
-import { toon } from "toonkit/express";
+import { toon } from "toonkit2/express";
 
 const app = express();
 app.use(...toon());
@@ -114,11 +114,11 @@ app.post("/devices", (req, res) => {
 
 ## Fastify
 
-Import from `toonkit/fastify`.
+Import from `toonkit2/fastify`.
 
 ```js
 import Fastify from "fastify";
-import { toon } from "toonkit/fastify";
+import { toon } from "toonkit2/fastify";
 
 const fastify = Fastify();
 await fastify.register(toon);
@@ -126,11 +126,11 @@ await fastify.register(toon);
 
 ## Hono
 
-Import from `toonkit/hono`.
+Import from `toonkit2/hono`.
 
 ```ts
 import { Hono } from "hono";
-import { toon } from "toonkit/hono";
+import { toon } from "toonkit2/hono";
 
 const app = new Hono();
 app.use("*", toon());
@@ -138,11 +138,11 @@ app.use("*", toon());
 
 ## Next.js
 
-Import from `toonkit/next/server`.
+Import from `toonkit2/next/server`.
 
 ```ts
 import { NextRequest } from "next/server";
-import { ToonResponse, parseToonRequest } from "toonkit/next/server";
+import { ToonResponse, parseToonRequest } from "toonkit2/next/server";
 
 export async function POST(req: NextRequest) {
   const body = await parseToonRequest(req);

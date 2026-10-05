@@ -11,6 +11,6 @@ const toonPlugin: FastifyPluginAsync<ToonFastifyOptions> = async (fastify) => {
 };
 
 export const toon = fp(toonPlugin, {
-  name: "toonkit",
+  name: "toonkit2",
   fastify: "5.x",
 });

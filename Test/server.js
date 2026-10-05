@@ -1,5 +1,5 @@
 const express = require("express");
-const { reqGetToon, resSendToon, sendToon, receiveToon } = require("toonkit"); // ✅ added sendToon & receiveToon
+const { reqGetToon, resSendToon, sendToon, receiveToon } = require("toonkit2");
 
 const app = express();
 app.use(express.text());

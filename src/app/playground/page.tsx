@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { jsonToToon, toonToJson } from "toonkit";
+import { jsonToToon, toonToJson } from "toonkit2";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 type InputMode = "json" | "toon" | "unknown";

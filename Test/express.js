@@ -1,5 +1,5 @@
 import express from "express"
-import {toon} from "toonkit/express"
+import { toon } from "toonkit2/express"
 const app = express()
 
 

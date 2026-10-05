@@ -758,7 +758,7 @@ export default function ToonkitDocs() {
             </p>
             <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 13, color: theme.textMuted }}>
               <span style={{ color: theme.green }}>$</span>{" "}
-              <span style={{ color: theme.text }}>npm install toonkit</span>
+              <span style={{ color: theme.text }}>npm install toonkit2</span>
             </div>
           </div>
 
@@ -788,7 +788,7 @@ export default function ToonkitDocs() {
                 — Serializes JavaScript objects to TOON format
               </li>
               <li>
-                Adapter exports — `toonkit/express`, `toonkit/fastify`, `toonkit/hono`, `toonkit/next/server`, and a `toonkit/fetch` client for convenience.
+                Adapter exports — `toonkit2/express`, `toonkit2/fastify`, `toonkit2/hono`, `toonkit2/next/server`, and a `toonkit2/fetch` client for convenience.
               </li>
             </ul>
 
@@ -843,9 +843,9 @@ export default function ToonkitDocs() {
           <section id="install" className="section-anim" style={{ marginBottom: 64 }}>
             <SectionHeader id="install" icon="📥" title="Installation" />
 
-            <CodeBlock label="npm">{`<span class="fn">npm</span> install toonkit`}</CodeBlock>
-            <CodeBlock label="yarn">{`<span class="fn">yarn</span> add toonkit`}</CodeBlock>
-            <CodeBlock label="pnpm">{`<span class="fn">pnpm</span> add toonkit`}</CodeBlock>
+            <CodeBlock label="npm">{`<span class="fn">npm</span> install toonkit2`}</CodeBlock>
+            <CodeBlock label="yarn">{`<span class="fn">yarn</span> add toonkit2`}</CodeBlock>
+            <CodeBlock label="pnpm">{`<span class="fn">pnpm</span> add toonkit2`}</CodeBlock>
           </section>
 
           {/* ── IMPORT & FUNCTIONS ── */}
@@ -868,12 +868,12 @@ export default function ToonkitDocs() {
             </div>
 
             {tabImport === "esm" ? (
-              <CodeBlock label="ES Module Import">{`<span class="kw">import</span> { <span class="fn">toonToJson</span>, <span class="fn">jsonToToon</span>, <span class="fn">toonFetch</span> } <span class="kw">from</span> <span class="str">"toonkit"</span>;
-<span class="kw">import</span> { <span class="fn">toon</span> } <span class="kw">from</span> <span class="str">"toonkit/express"</span>;
-// or: import { toon } from "toonkit/fastify"`}</CodeBlock>
+              <CodeBlock label="ES Module Import">{`<span class="kw">import</span> { <span class="fn">toonToJson</span>, <span class="fn">jsonToToon</span>, <span class="fn">toonFetch</span> } <span class="kw">from</span> <span class="str">"toonkit2"</span>;
+<span class="kw">import</span> { <span class="fn">toon</span> } <span class="kw">from</span> <span class="str">"toonkit2/express"</span>;
+// or: import { toon } from "toonkit2/fastify"`}</CodeBlock>
             ) : (
-              <CodeBlock label="CommonJS Require">{`<span class="kw">const</span> { <span class="fn">toonToJson</span>, <span class="fn">jsonToToon</span>, <span class="fn">toonFetch</span> } = <span class="fn">require</span>(<span class="str">"toonkit"</span>);
-<span class="kw">const</span> { <span class="fn">toon</span> } = <span class="kw">require</span>(<span class="str">"toonkit/express"</span>);`}</CodeBlock>
+              <CodeBlock label="CommonJS Require">{`<span class="kw">const</span> { <span class="fn">toonToJson</span>, <span class="fn">jsonToToon</span>, <span class="fn">toonFetch</span> } = <span class="fn">require</span>(<span class="str">"toonkit2"</span>);
+<span class="kw">const</span> { <span class="fn">toon</span> } = <span class="kw">require</span>(<span class="str">"toonkit2/express"</span>);`}</CodeBlock>
             )}
 
             <h3 style={{ fontSize: 17, fontWeight: 700, color: theme.text, marginBottom: 16, marginTop: 28 }}>
@@ -1216,7 +1216,7 @@ true
                   middleware.
                 </p>
                 <CodeBlock label="Basic Setup">{`<span class="kw">import</span> express <span class="kw">from</span> <span class="str">"express"</span>;
-<span class="kw">import</span> { <span class="fn">toonToJson</span>, <span class="fn">jsonToToon</span> } <span class="kw">from</span> <span class="str">"toonkit"</span>;
+<span class="kw">import</span> { <span class="fn">toonToJson</span>, <span class="fn">jsonToToon</span> } <span class="kw">from</span> <span class="str">"toonkit2"</span>;
 
 <span class="kw">const</span> app = <span class="fn">express</span>();
 
@@ -1277,7 +1277,7 @@ app.<span class="fn">listen</span>(<span class="num">3000</span>, () => console.
 
             {tabExample === "full" && (
               <CodeBlock label="Complete Express Route">{`<span class="kw">import</span> express <span class="kw">from</span> <span class="str">"express"</span>;
-<span class="kw">import</span> { <span class="fn">toonToJson</span>, <span class="fn">jsonToToon</span> } <span class="kw">from</span> <span class="str">"toonkit"</span>;
+<span class="kw">import</span> { <span class="fn">toonToJson</span>, <span class="fn">jsonToToon</span> } <span class="kw">from</span> <span class="str">"toonkit2"</span>;
 
 <span class="kw">const</span> app = <span class="fn">express</span>();
 app.<span class="fn">use</span>(express.<span class="fn">text</span>());  <span class="comment">// Required</span>
@@ -1465,7 +1465,7 @@ console.log(response.status);`}</CodeBlock>
             </p>
 
             <CodeBlock label="Fastify Plugin">{`<span class="kw">import</span> Fastify <span class="kw">from</span> <span class="str">"fastify"</span>;
-<span class="kw">import</span> { <span class="fn">toon</span> } <span class="kw">from</span> <span class="str">"toonkit/fastify"</span>;
+<span class="kw">import</span> { <span class="fn">toon</span> } <span class="kw">from</span> <span class="str">"toonkit2/fastify"</span>;
 
 <span class="kw">const</span> app = <span class="fn">Fastify</span>();
 await app.<span class="fn">register</span>(<span class="fn">toon</span>);
@@ -1481,11 +1481,11 @@ app.<span class="fn">post</span>(<span class="str">"/devices"</span>, async (req
             <SectionHeader id="express-plugin" icon="🧩" title="Express plugin" subtitle="Register middleware for Express" />
 
             <p style={{ fontSize: 14, color: theme.textDim, marginBottom: 12 }}>
-              Express users can mount the `toon` middleware from `toonkit/express` to get `req.toon()` and `res.toon()` helpers.
+              Express users can mount the `toon` middleware from `toonkit2/express` to get `req.toon()` and `res.toon()` helpers.
             </p>
 
             <CodeBlock label="Express Plugin">{`<span class="kw">import</span> express <span class="kw">from</span> <span class="str">"express"</span>;
-<span class="kw">import</span> { <span class="fn">toon</span> } <span class="kw">from</span> <span class="str">"toonkit/express"</span>;
+<span class="kw">import</span> { <span class="fn">toon</span> } <span class="kw">from</span> <span class="str">"toonkit2/express"</span>;
 
 <span class="kw">const</span> app = <span class="fn">express</span>();
 <span class="comment">// Mount middleware (returns [parser, responder] or a single middleware depending on build)</span>
@@ -1506,7 +1506,7 @@ app.<span class="fn">post</span>(<span class="str">"/devices"</span>, (req, res)
             </p>
 
             <CodeBlock label="Hono Middleware">{`<span class="kw">import</span> { <span class="fn">Hono</span> } <span class="kw">from</span> <span class="str">"hono"</span>;
-<span class="kw">import</span> { <span class="fn">toon</span> } <span class="kw">from</span> <span class="str">"toonkit/hono"</span>;
+<span class="kw">import</span> { <span class="fn">toon</span> } <span class="kw">from</span> <span class="str">"toonkit2/hono"</span>;
 
 <span class="kw">const</span> app = <span class="kw">new</span> <span class="fn">Hono</span>();
 app.use(<span class="str">"*"</span>, <span class="fn">toon</span>());
@@ -1522,7 +1522,7 @@ app.post(<span class="str">"/devices"</span>, (c) =&gt; c.json({ ok: <span class
               Next server adapters expose `parseToonRequest` and `ToonResponse` helpers for route handlers.
             </p>
 
-            <CodeBlock label="Next.js Route">{`<span class="kw">import</span> { <span class="fn">parseToonRequest</span>, <span class="fn">ToonResponse</span> } <span class="kw">from</span> <span class="str">"toonkit/next/server"</span>;
+            <CodeBlock label="Next.js Route">{`<span class="kw">import</span> { <span class="fn">parseToonRequest</span>, <span class="fn">ToonResponse</span> } <span class="kw">from</span> <span class="str">"toonkit2/next/server"</span>;
 
 export async function POST(req) {
   <span class="kw">const</span> body = await <span class="fn">parseToonRequest</span>(req);

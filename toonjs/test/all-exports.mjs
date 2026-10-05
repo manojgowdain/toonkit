@@ -103,6 +103,28 @@ async function main() {
       fn: async () => {
         assert.deepEqual(core.toonToJson('name[1]{0:s}:\nToon\n'), { name: 'Toon' });
         assert.match(core.jsonToToon({ active: true }), /active\[1\]\{0:b\}:/);
+
+        const nested = `employees[2]{id:n,name:s,salary:a,active:b}:
+1,Riya,"[6565,65656,56565,6656]",true
+2,Anu,"[10,20]",false
+`;
+
+        assert.deepEqual(core.toonToJson(nested), {
+          employees: [
+            { id: 1, name: 'Riya', salary: [6565, 65656, 56565, 6656], active: true },
+            { id: 2, name: 'Anu', salary: [10, 20], active: false },
+          ],
+        });
+
+        assert.deepEqual(core.toonToJson(core.jsonToToon({
+          employees: [
+            { id: 1, name: 'Riya', salary: [6565, 65656, 56565, 6656], active: true },
+          ],
+        })), {
+          employees: [
+            { id: 1, name: 'Riya', salary: [6565, 65656, 56565, 6656], active: true },
+          ],
+        });
       },
     },
     {
