@@ -7,6 +7,81 @@ export function safeParse(val: string): any {
   }
 }
 
+export type ToonPrimitive = string | number | boolean | null;
+export type ToonValue = ToonPrimitive | ToonObject | ToonArray;
+export type ToonObject = { [key: string]: ToonValue };
+export type ToonArray = ToonValue[];
+
+type ToonField = { name: string; type: string };
+type ToonRuntimeMeta = {
+  rootKey?: string;
+  fields?: ToonField[];
+};
+
+const runtimeMeta = new WeakMap<object, ToonRuntimeMeta>();
+
+function attachRuntime<T extends object>(value: T, meta: ToonRuntimeMeta): T {
+  runtimeMeta.set(value, meta);
+  Object.defineProperty(value, "toToon", {
+    configurable: true,
+    enumerable: false,
+    value: () => serializeRuntime(value),
+  });
+  return value;
+}
+
+function interpolateTemplate(
+  strings: TemplateStringsArray,
+  values: unknown[],
+): string {
+  return strings.raw.reduce((result, part, index) => {
+    if (index >= values.length) return result + part;
+    const value = values[index];
+    return result + part + (typeof value === "string" ? value : JSON.stringify(value));
+  }, "");
+}
+
+function parseScalar(value: string): ToonValue {
+  const parsed = safeParse(value);
+  if (parsed !== value) return parsed;
+  if (value === "true") return true;
+  if (value === "false") return false;
+  if (value === "null") return null;
+  return value;
+}
+
+function parseObjectDocument(input: string): ToonObject | null {
+  const lines = input.split("\n").filter((line) => line.trim());
+  if (!lines.length || lines.some((line) => !line.includes(":"))) return null;
+  const firstSeparator = lines[0].indexOf(":");
+  if (firstSeparator > 0 && !lines[0].slice(firstSeparator + 1).trim()) {
+    const rootKey = lines[0].slice(0, firstSeparator).trim();
+    const child = parseObjectDocument(
+      lines.slice(1).map((line) => `  ${line}`).join("\n"),
+    );
+    return { [rootKey]: child ?? {} };
+  }
+  const root: ToonObject = {};
+  const stack: Array<{ indent: number; value: ToonObject }> = [{ indent: -1, value: root }];
+
+  for (const line of lines) {
+    const indent = line.length - line.trimStart().length;
+    const separator = line.indexOf(":");
+    const key = line.slice(0, separator).trim();
+    const rawValue = line.slice(separator + 1).trim();
+    while (stack.length > 1 && indent <= stack[stack.length - 1].indent) stack.pop();
+    const parent = stack[stack.length - 1].value;
+    if (rawValue) {
+      parent[key] = parseScalar(rawValue);
+    } else {
+      const child: ToonObject = {};
+      parent[key] = child;
+      stack.push({ indent, value: child });
+    }
+  }
+  return root;
+}
+
 function splitTopLevel(input: string, delimiter = ","): string[] {
   if (input === "") {
     return [""];
@@ -130,6 +205,9 @@ export function toonToJson(input: string): any {
   const lines = input.split("\n");
   const obj: any = {};
   const headerPattern = /^(.+?)\[(\d+)\]\{(.+)\}:\s*$/;
+  if (!lines.some((line) => headerPattern.test(line.trim()))) {
+    return parseObjectDocument(input) ?? obj;
+  }
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim();
@@ -202,9 +280,20 @@ export function jsonToToon(obj: any): string {
         val[0] !== null &&
         !Array.isArray(val[0])
       ) {
-        const fields = Object.keys(val[0]);
+        const meta = runtimeMeta.get(val);
+        const fieldNames = new Set(meta?.fields?.map((field) => field.name));
+        val.forEach((item: any) => {
+          if (item && typeof item === "object") {
+            Object.keys(item).forEach((field) => fieldNames.add(field));
+          }
+        });
+        const fields = [...fieldNames];
         const schema = fields
-          .map((field) => `${field}:${getType(val[0][field])}`)
+          .map((field) => {
+            const original = meta?.fields?.find((entry) => entry.name === field);
+            const sample = val.find((item: any) => item?.[field] !== undefined)?.[field];
+            return `${field}:${original?.type ?? getType(sample)}`;
+          })
           .join(",");
 
         result += `${key}[${val.length}]{${schema}}:\n`;
@@ -237,6 +326,92 @@ export function jsonToToon(obj: any): string {
 
   return result.trim();
 }
+
+function serializeRuntime(value: object): string {
+  const meta = runtimeMeta.get(value);
+  if (!meta?.rootKey) return jsonToToon(value);
+  if (!Array.isArray(value)) {
+    const render = (current: Record<string, unknown>, indent: string): string[] =>
+      Object.entries(current).flatMap(([key, child]) => {
+        if (child && typeof child === "object" && !Array.isArray(child)) {
+          return [`${indent}${key}:`, ...render(child as Record<string, unknown>, `${indent}  `)];
+        }
+        return [`${indent}${key}: ${formatValue(child, getType(child))}`];
+      });
+    return [`${meta.rootKey}:`, ...render(value as Record<string, unknown>, "  ")].join("\n");
+  }
+  return jsonToToon({ [meta.rootKey]: value });
+}
+
+function cloneValue<T>(value: T): T {
+  const clone = typeof structuredClone === "function"
+    ? structuredClone(value)
+    : JSON.parse(JSON.stringify(value)) as T;
+  if (clone && typeof clone === "object") {
+    const meta = runtimeMeta.get(value as object);
+    if (meta) return attachRuntime(clone as object, { ...meta }) as T;
+  }
+  return clone;
+}
+
+function equalValue(a: unknown, b: unknown): boolean {
+  if (Object.is(a, b)) return true;
+  if (typeof a !== typeof b || a === null || b === null) return false;
+  if (Array.isArray(a) !== Array.isArray(b)) return false;
+  if (Array.isArray(a)) {
+    return a.length === (b as unknown[]).length &&
+      a.every((value, index) => equalValue(value, (b as unknown[])[index]));
+  }
+  if (typeof a === "object") {
+    const aKeys = Object.keys(a as object);
+    const bKeys = Object.keys(b as object);
+    return aKeys.length === bKeys.length &&
+      aKeys.every((key) => equalValue(
+        (a as Record<string, unknown>)[key],
+        (b as Record<string, unknown>)[key],
+      ));
+  }
+  return false;
+}
+
+export interface ToonTagged {
+  <T = ToonValue>(strings: TemplateStringsArray, ...values: unknown[]): T;
+  <T = ToonValue>(value: T): T;
+  toToon<T>(value: T): string;
+  toJSON<T>(value: T): T;
+  clone<T>(value: T): T;
+  equals(a: unknown, b: unknown): boolean;
+}
+
+export const toon: ToonTagged = ((first: TemplateStringsArray | ToonValue, ...values: unknown[]) => {
+  if (Array.isArray(first) && "raw" in first) {
+    const strings = first as unknown as TemplateStringsArray;
+    const parsed = toonToJson(interpolateTemplate(strings, values));
+    const keys = Object.keys(parsed);
+    if (keys.length === 1 && Array.isArray(parsed[keys[0]])) {
+      return attachRuntime(parsed[keys[0]], {
+        rootKey: keys[0],
+        fields: Object.keys(parsed[keys[0]][0] ?? {}).map((name) => ({
+          name,
+          type: getType(parsed[keys[0]][0][name]),
+        })),
+      });
+    }
+    if (keys.length === 1 && parsed[keys[0]] && typeof parsed[keys[0]] === "object") {
+      return attachRuntime(parsed[keys[0]], { rootKey: keys[0] });
+    }
+    return parsed;
+  }
+  return first;
+}) as ToonTagged;
+
+toon.toToon = (value) => {
+  const runtime = value as object;
+  return runtimeMeta.has(runtime) ? serializeRuntime(runtime) : jsonToToon(value);
+};
+toon.toJSON = (value) => cloneValue(value);
+toon.clone = cloneValue;
+toon.equals = equalValue;
 
 export {
   configureToonFetch as configureToonAxios,

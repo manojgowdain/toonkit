@@ -9,7 +9,7 @@ export default function robots() {
     },
     sitemaps: [
       "https://toonkit.js.org/sitemap.xml",
-      "https://toonkit.manojgowda.in/sitemap.xml",
+      "https://toonkit.js.org/sitemap.xml",
     ],
   };
 }

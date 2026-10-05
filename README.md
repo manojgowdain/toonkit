@@ -3,6 +3,24 @@
 
 TOON parser, serializer, and framework adapter toolkit for JavaScript and TypeScript.
 
+## Official links
+
+- Documentation: https://toonkit.js.org/
+- Recommended npm package: https://www.npmjs.com/package/toonkit2
+- JSR package: https://jsr.io/@manojgowdain/toonkit2
+- Source repository: https://github.com/manojgowdain/toonkit
+- Developer: https://manojgowda.in/
+- Related projects: https://ssdiskdb.js.org/ · https://pgbloom.iotkit.in/
+
+Install the new package for all new projects:
+
+```bash
+npm install toonkit2
+```
+
+`toonkit` is the legacy package name. See the
+[official documentation](https://toonkit.js.org/docs) for migration guidance.
+
 This repository’s publishable library is the package under [toonjs](./toonjs), and the package name is now `toonkit2`.
 
 ## Exports
@@ -24,12 +42,6 @@ Subpath exports:
 - `toonkit2/fastify`
 - `toonkit2/hono`
 - `toonkit2/next/server`
-
-## Install
-
-```bash
-npm install toonkit2
-```
 
 ## Core format
 
@@ -62,6 +74,27 @@ Supported type codes:
 | `td` | raw text/date | returned as-is |
 
 ## Core API
+
+## TOON Runtime
+
+```ts
+import { toon } from "toonkit2";
+
+const employees = toon`
+employees[2]{id:n,name:s,salary:n,active:b}:
+1,Riya,90000,true
+2,John,80000,false
+`;
+
+employees[0].salary = 95000;
+employees.push({ id: 3, name: "Manoj", salary: 100000, active: true });
+
+console.log(employees.map((employee) => employee.name));
+console.log(employees.toToon());
+```
+
+The tagged runtime behaves like a normal JavaScript array or object and keeps
+TOON schema/count information synchronized when data is mutated.
 
 ### `toonToJson(input: string)`
 

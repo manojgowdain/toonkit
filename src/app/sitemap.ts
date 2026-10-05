@@ -4,7 +4,7 @@ export const revalidate = 0;
 export default function sitemap() {
   const domains = [
     "https://toonkit.js.org",
-    "https://toonkit.manojgowda.in",
+    "https://toonkit.js.org",
   ];
   const pages = [
     "",

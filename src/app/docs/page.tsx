@@ -378,6 +378,7 @@ const navItems: NavItem[] = [
   { id: "intro", label: "Overview" },
   { id: "install", label: "Installation" },
   { id: "import", label: "Import & Functions" },
+  { id: "runtime", label: "TOON Runtime" },
   { id: "toon-to-json", label: "toonToJson()" },
   { id: "json-to-toon", label: "jsonToToon()" },
   { id: "types", label: "Type Codes" },
@@ -599,7 +600,7 @@ export default function ToonkitDocs() {
               }}
             >
               <span className="docs-sidebar-title">
-                toonkit
+                toonkit2
               </span>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
@@ -660,7 +661,7 @@ export default function ToonkitDocs() {
               ↗ GitHub
             </a>
             <a
-              href="https://www.npmjs.com/package/toonkit"
+              href="https://www.npmjs.com/package/toonkit2"
               target="_blank"
               rel="noreferrer"
               style={{
@@ -673,7 +674,23 @@ export default function ToonkitDocs() {
                 fontFamily: "'Space Mono', monospace",
               }}
             >
-              ↗ NPM Package
+              ↗ Recommended NPM Package
+            </a>
+            <a
+              href="https://jsr.io/@manojgowdain/toonkit2"
+              target="_blank"
+              rel="noreferrer"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                fontSize: 12,
+                color: theme.textMuted,
+                textDecoration: "none",
+                fontFamily: "'Space Mono', monospace",
+              }}
+            >
+              ↗ JSR Package
             </a>
           </div>
         </aside>
@@ -921,6 +938,38 @@ export default function ToonkitDocs() {
                 </div>
               ))}
             </div>
+          </section>
+
+          {/* ── TOON RUNTIME ── */}
+          <section id="runtime" className="section-anim" style={{ marginBottom: 64 }}>
+            <SectionHeader
+              id="runtime"
+              icon="⚡"
+              title="TOON Runtime"
+              subtitle="Native JavaScript access with schema-aware serialization."
+            />
+            <CodeBlock label="Tagged template">{`<span class="kw">import</span> { <span class="fn">toon</span> } <span class="kw">from</span> <span class="str">"toonkit2"</span>;
+
+<span class="kw">const</span> employees = <span class="fn">toon</span>\`
+employees[2]{id:n,name:s,salary:n,active:b}:
+1,Riya,90000,true
+2,John,80000,false
+\`;
+
+employees[0].salary = 95000;
+employees.push({ id: 3, name: "Manoj", salary: 100000, active: true });
+<span class="fn">console</span>.log(employees.toToon());`}</CodeBlock>
+            <p style={{ color: theme.textDim, lineHeight: 1.7, marginTop: 18 }}>
+              The returned value is a real array or object, so property access,
+              push/pop/splice, map/filter/find/reduce, destructuring, and
+              JSON.stringify work normally. Mutations are reflected in
+              <code style={{ color: theme.accent }}> toToon()</code>; row counts
+              and schemas are recalculated automatically.
+            </p>
+            <CodeBlock label="Helpers">{`<span class="fn">toon</span>.toToon(employees);
+<span class="fn">toon</span>.toJSON(employees);
+<span class="fn">toon</span>.clone(employees);
+<span class="fn">toon</span>.equals(a, b);`}</CodeBlock>
           </section>
 
           {/* ── toonToJson ── */}
@@ -1715,10 +1764,10 @@ export async function POST(req) {
               }}
             >
               <div style={{ fontWeight: 800, fontSize: 16, color: theme.text, marginBottom: 8 }}>
-                Ready to use toonkit?
+                Ready to use toonkit2?
               </div>
               <p style={{ fontSize: 13, color: theme.textDim, marginBottom: 20, lineHeight: 1.6 }}>
-                Install from npm, import the functions, and start converting between JSON and TOON.
+                Install the recommended toonkit2 package from npm or JSR, import the functions, and start converting between JSON and TOON.
                 Perfect for REST APIs, bots, IoT devices, and any system where payload size matters.
               </p>
               <div className="docs-footer-actions">
@@ -1741,7 +1790,7 @@ export async function POST(req) {
                   ⭐ GitHub
                 </a>
                 <a
-                  href="https://www.npmjs.com/package/toonkit"
+                  href="https://www.npmjs.com/package/toonkit2"
                   target="_blank"
                   rel="noreferrer"
                   style={{
@@ -1756,7 +1805,61 @@ export async function POST(req) {
                     fontFamily: "'Space Mono', monospace",
                   }}
                 >
-                  📦 NPM
+                  📦 NPM (RECOMMENDED)
+                </a>
+                <a
+                  href="https://jsr.io/@manojgowdain/toonkit2"
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    padding: "9px 18px",
+                    borderRadius: 8,
+                    background: `${theme.green}22`,
+                    border: `1px solid ${theme.green}44`,
+                    color: theme.green,
+                    textDecoration: "none",
+                    fontSize: 12,
+                    fontWeight: 700,
+                    fontFamily: "'Space Mono', monospace",
+                  }}
+                >
+                  🦕 JSR
+                </a>
+                <a
+                  href="https://ssdiskdb.js.org/"
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    padding: "9px 18px",
+                    borderRadius: 8,
+                    background: `${theme.accent}18`,
+                    border: `1px solid ${theme.accent}44`,
+                    color: theme.accent,
+                    textDecoration: "none",
+                    fontSize: 12,
+                    fontWeight: 700,
+                    fontFamily: "'Space Mono', monospace",
+                  }}
+                >
+                  SSDISKDB
+                </a>
+                <a
+                  href="https://pgbloom.iotkit.in/"
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    padding: "9px 18px",
+                    borderRadius: 8,
+                    background: `${theme.accent}18`,
+                    border: `1px solid ${theme.accent}44`,
+                    color: theme.accent,
+                    textDecoration: "none",
+                    fontSize: 12,
+                    fontWeight: 700,
+                    fontFamily: "'Space Mono', monospace",
+                  }}
+                >
+                  PGBLOOM
                 </a>
               </div>
             </div>

@@ -102,6 +102,26 @@ async function main() {
       name: 'core parser handles primitives and arrays',
       fn: async () => {
         assert.deepEqual(core.toonToJson('name[1]{0:s}:\nToon\n'), { name: 'Toon' });
+        assert.deepEqual(core.toonToJson(`number[1]{0:n}:
+36.7
+active[1]{0:b}:
+true
+empty[1]{0:nl}:
+null
+object[1]{0:j}:
+{"a":1}
+array[1]{0:a}:
+[1,"a",true]
+timestamp[1]{0:td}:
+03042026120000
+`), {
+          number: 36.7,
+          active: true,
+          empty: null,
+          object: { a: 1 },
+          array: [1, 'a', true],
+          timestamp: '03042026120000',
+        });
         assert.match(core.jsonToToon({ active: true }), /active\[1\]\{0:b\}:/);
         assert.doesNotMatch(core.jsonToToon({
           tags: ['toon', 'json', 'fast'],
@@ -129,6 +149,51 @@ async function main() {
             { id: 1, name: 'Riya', salary: [6565, 65656, 56565, 6656], active: true },
           ],
         });
+
+        const salary = 100000;
+        const employees = core.toon`
+employees[2]{id:n,name:s,salary:n,active:b}:
+1,Riya,90000,true
+2,John,80000,false
+`;
+        assert.equal(Array.isArray(employees), true);
+        assert.equal(employees[0].name, 'Riya');
+        employees[0].salary = 95000;
+        employees.push({ id: 3, name: 'Manoj', salary, active: true });
+        assert.match(employees.toToon(), /employees\[3\]\{id:n,name:s,salary:n,active:b\}/);
+        assert.match(employees.toToon(), /3,Manoj,100000,true/);
+        assert.equal(employees instanceof Array, true);
+        assert.deepEqual(employees.map((employee) => employee.name), ['Riya', 'John', 'Manoj']);
+        assert.equal(employees.find((employee) => employee.id === 2).name, 'John');
+        assert.equal(employees.reduce((total, employee) => total + employee.salary, 0), 275000);
+        assert.deepEqual(Object.keys(employees[0]), ['id', 'name', 'salary', 'active']);
+        const [first] = employees;
+        assert.equal(first.name, 'Riya');
+        assert.deepEqual(JSON.parse(JSON.stringify(employees[0])), employees[0]);
+        employees.splice(2, 1);
+        assert.match(core.toon.toToon(employees), /employees\[2\]/);
+        assert.deepEqual(core.toon.toJSON(employees[0]), employees[0]);
+
+        const interpolated = core.toon`
+employees[1]{id:n,name:s,salary:n}:
+1,Riya,${salary}
+`;
+        assert.equal(interpolated[0].salary, 100000);
+        assert.deepEqual(core.toon.clone(employees[0]), employees[0]);
+        assert.equal(core.toon.equals({ a: 1 }, { a: 1 }), true);
+
+        const user = core.toon`
+user:
+name: Manoj
+age: 24
+active: true
+`;
+        assert.equal(user.name, 'Manoj');
+        user.name = 'Riya';
+        assert.match(user.toToon(), /user:\n  name: Riya/);
+        assert.equal('name' in user, true);
+        assert.deepEqual(Object.entries(user).map(([key]) => key), ['name', 'age', 'active']);
+        assert.equal(core.toon.equals(core.toon.clone(user), user), true);
       },
     },
     {
@@ -164,6 +229,43 @@ async function main() {
           fetchMod.toonAxios.defaults.adapter = originalAdapter;
           fetchMod.toonAxios.defaults.baseURL = originalBaseURL;
           fetchMod.toonAxios.defaults.headers.common = originalHeaders;
+        }
+      },
+    },
+    {
+      name: 'fetch client serializes documented request formats',
+      fn: async () => {
+        const originalAdapter = fetchMod.toonAxios.defaults.adapter;
+        const calls = [];
+        try {
+          fetchMod.toonAxios.defaults.adapter = async (config) => {
+            calls.push(config);
+            return {
+              data: 'ok[1]{0:b}:\ntrue\n',
+              status: 200,
+              statusText: 'OK',
+              headers: { 'content-type': 'application/toon' },
+              config,
+              request: {},
+            };
+          };
+
+          await fetchMod.toonFetch('http://example.test/toon', {
+            method: 'POST',
+            data: { active: true },
+          });
+          assert.match(String(calls[0].data), /active\[1\]\{0:b\}/);
+          assert.equal(calls[0].headers['Content-Type'], 'application/toon');
+
+          await fetchMod.toonFetch('http://example.test/json', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            data: { active: true },
+          });
+          assert.equal(calls[1].data, '{"active":true}');
+          assert.equal(calls[1].headers['Content-Type'], 'application/json');
+        } finally {
+          fetchMod.toonAxios.defaults.adapter = originalAdapter;
         }
       },
     },

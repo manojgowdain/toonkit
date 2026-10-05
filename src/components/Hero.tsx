@@ -69,7 +69,7 @@ export default function Hero() {
               lineHeight: 1.6,
             }}
           >
-            Simple: TOON is a compact, typed text format for APIs. toonkit is the
+            Simple: TOON is a compact, typed text format for APIs. toonkit2 is the
             JavaScript toolkit that makes it easy to use TOON everywhere — in the
             browser, in Node servers, and in HTTP clients.
           </Typography>
@@ -180,7 +180,7 @@ export default function Hero() {
           }}
         >
           <Box component="code" sx={{ fontFamily: "inherit" }}>
-            npm i <strong>toonkit</strong>
+          npm i <strong>toonkit2</strong>
           </Box>
         </Box>
 
@@ -195,31 +195,51 @@ export default function Hero() {
           <Button
             variant="outlined"
             component={Link}
-            href="https://www.npmjs.com/package/toonkit"
+            href="https://www.npmjs.com/package/toonkit2"
             target="_blank"
             size="small"
           >
-            NPM PACKAGE
+            NPM PACKAGE (RECOMMENDED)
           </Button>
 
           <Button
             variant="outlined"
             component={Link}
-            href="https://libraries.io/npm/toonkit"
+            href="https://jsr.io/@manojgowdain/toonkit2"
             target="_blank"
             size="small"
           >
-            LIBRARIES.IO
+            JSR PACKAGE
           </Button>
 
           <Button
             variant="outlined"
             component={Link}
-            href="https://toonkit.manojgowda.in/"
+            href="https://www.npmjs.com/package/toonkit2"
             target="_blank"
             size="small"
           >
-            TOONKIT.MANOJGOWDA.IN
+            TOONKIT2 NPM
+          </Button>
+
+          <Button
+            variant="outlined"
+            component={Link}
+            href="https://ssdiskdb.js.org/"
+            target="_blank"
+            size="small"
+          >
+            SSDISKDB
+          </Button>
+
+          <Button
+            variant="outlined"
+            component={Link}
+            href="https://pgbloom.iotkit.in/"
+            target="_blank"
+            size="small"
+          >
+            PGBLOOM
           </Button>
 
           <Button

@@ -605,8 +605,9 @@ export default function ToonkitPlayground() {
         </div>
         <div className="pg-links">
           <a href="https://github.com/ManojGowda89/toonkit" target="_blank" rel="noreferrer">↗ GitHub</a>
-          <a href="https://toonkit.manojgowda.in" target="_blank" rel="noreferrer">↗ Docs</a>
-          <a href="https://www.npmjs.com/package/toonkit" target="_blank" rel="noreferrer">↗ npm</a>
+          <a href="https://toonkit.js.org" target="_blank" rel="noreferrer">↗ Official docs</a>
+          <a href="https://www.npmjs.com/package/toonkit2" target="_blank" rel="noreferrer">↗ npm (recommended)</a>
+          <a href="https://jsr.io/@manojgowdain/toonkit2" target="_blank" rel="noreferrer">↗ JSR</a>
         </div>
       </header>
 
@@ -950,7 +951,7 @@ export default function ToonkitPlayground() {
 
         {/* Footer */}
         <footer className="pg-footer">
-          Built by <a href="https://manojgowda.in" target="_blank" rel="noreferrer">Manoj Gowda</a> · <a href="https://github.com/ManojGowda89/toonkit" target="_blank" rel="noreferrer">GitHub</a> · <a href="https://toonkit.manojgowda.in" target="_blank" rel="noreferrer">Docs</a> · MIT
+          Built by <a href="https://manojgowda.in" target="_blank" rel="noreferrer">Manoj Gowda</a> · <a href="https://github.com/ManojGowda89/toonkit" target="_blank" rel="noreferrer">GitHub</a> · <a href="https://toonkit.js.org" target="_blank" rel="noreferrer">Official docs</a> · MIT
         </footer>
       </div>
     </>

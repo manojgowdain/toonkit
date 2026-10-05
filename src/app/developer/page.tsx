@@ -22,12 +22,18 @@ export default function Page() {
         Manoj Gowda
       </Typography>
       <Typography sx={{ mt: 1.5, maxWidth: 560, fontSize: { xs: "1rem", md: "1.1rem" }, lineHeight: 1.7 }}>
-        Creator of toonkit — building tools that simplify development.
+        Creator of toonkit2 and developer tools that simplify development.
       </Typography>
 
       <Link href="https://github.com/ManojGowda89" sx={{ display: "inline-block", mt: 2 }}>
         GitHub
       </Link>
+      <Typography sx={{ mt: 3, lineHeight: 1.8 }}>
+        Explore my other projects:{" "}
+        <Link href="https://ssdiskdb.js.org/" target="_blank">SSDiskDB</Link>
+        {" · "}
+        <Link href="https://pgbloom.iotkit.in/" target="_blank">PGBloom</Link>
+      </Typography>
     </Container>
   );
 }

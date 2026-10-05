@@ -4,6 +4,19 @@ Typed Object Oriented Notation (TOON) parser, serializer, and adapter toolkit fo
 
 This package is the released 2.x package name for the TOON toolkit.
 
+## Official links
+
+- Official documentation: https://toonkit.js.org/
+- npm: https://www.npmjs.com/package/toonkit2
+- JSR: https://jsr.io/@manojgowdain/toonkit2
+- GitHub: https://github.com/manojgowdain/toonkit
+- Author: https://manojgowda.in/
+- Related projects: https://ssdiskdb.js.org/ · https://pgbloom.iotkit.in/
+
+For new applications, install `toonkit2`. The older `toonkit` package is
+maintained only as a legacy package name; use the official documentation for
+migration guidance.
+
 ## What it exports
 
 The package root exports the core helpers plus the fetch client:
@@ -63,6 +76,32 @@ Supported type codes in the current implementation:
 | `td` | timestamp/raw text | returned as-is |
 
 ## Core API
+
+## TOON Runtime
+
+Use the `toon` tagged template when you want TOON data to behave like a native
+JavaScript value while retaining its schema for serialization:
+
+```ts
+import { toon } from "toonkit2";
+
+const employees = toon`
+employees[2]{id:n,name:s,salary:n,active:b}:
+1,Riya,90000,true
+2,John,80000,false
+`;
+
+employees[0].salary = 95000;
+employees.push({ id: 3, name: "Manoj", salary: 100000, active: true });
+
+console.log(employees.filter((employee) => employee.active));
+console.log(employees.toToon());
+```
+
+The runtime supports normal array operations, direct mutation, template
+interpolation, `JSON.stringify`, and compact serialization with updated row
+counts and schemas. It also exposes `toon.toToon(value)`, `toon.toJSON(value)`,
+`toon.clone(value)`, and `toon.equals(a, b)`.
 
 ### `toonToJson(input: string)`
 
