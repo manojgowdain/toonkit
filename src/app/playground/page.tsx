@@ -669,7 +669,7 @@ export default function Playground() {
             throw new Error(await res.text());
           }
         } catch (e) {
-          // Fallback: convert in-browser using the `toonkit` package
+          // Fallback: convert in-browser using the `toonkit2` package
           try {
             const obj = JSON.parse(input);
             outputText = jsonToToon(obj);
@@ -693,7 +693,7 @@ export default function Playground() {
             throw new Error(err.error ?? "Parse failed");
           }
         } catch (e) {
-          // Fallback: parse in-browser using `toonkit`
+          // Fallback: parse in-browser using `toonkit2`
           try {
             const json = toonToJson(input);
             outputText = JSON.stringify(json, null, 2);

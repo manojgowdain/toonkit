@@ -51,6 +51,6 @@ var toonPlugin = function (fastify) { return __awaiter(void 0, void 0, void 0, f
     });
 }); };
 exports.toon = (0, fastify_plugin_1.default)(toonPlugin, {
-    name: "toonkit",
+    name: "toonkit2",
     fastify: "5.x",
 });

@@ -1323,7 +1323,7 @@ app.<span class="fn">listen</span>(<span class="num">3000</span>);</span>`}</Cod
             <SectionHeader id="core-frontend" icon="🧭" title="Core parser & Frontend usage" subtitle="How the main parser works and using TOON in browsers" />
 
             <p style={{ fontSize: 14, color: theme.textDim, marginBottom: 12 }}>
-              The core of `toonkit` is the parser/serializer pair:
+              The core of `toonkit2` is the parser/serializer pair:
             </p>
             <ul style={{ fontSize: 13, color: theme.textDim, marginBottom: 16 }}>
               <li><code style={{ color: theme.accent }}>toonToJson(input: string)</code> — parse TOON text into typed JavaScript objects.</li>
@@ -1335,28 +1335,28 @@ app.<span class="fn">listen</span>(<span class="num">3000</span>);</span>`}</Cod
               Two common front-end patterns: fetch the raw TOON response and parse locally, or use `toonFetch` which returns parsed data.
             </p>
 
-            <CodeBlock label="Manual fetch + parse">{`<span class="kw">import</span> { <span class="fn">toonToJson</span> } <span class="kw">from</span> <span class="str">"toonkit"</span>;
+            <CodeBlock label="Manual fetch + parse">{`<span class="kw">import</span> { <span class="fn">toonToJson</span> } <span class="kw">from</span> <span class="str">"toonkit2"</span>;
 
 <span class="kw">const</span> res = <span class="kw">await</span> fetch(<span class="str">"/api/devices"</span>);
 <span class="kw">const</span> text = <span class="kw">await</span> res.text();
 <span class="kw">const</span> data = <span class="fn">toonToJson</span>(text);`}</CodeBlock>
 
-            <CodeBlock label="Using toonFetch (direct)">{`<span class="kw">import</span> { <span class="fn">toonFetch</span> } <span class="kw">from</span> <span class="str">"toonkit"</span>;
+            <CodeBlock label="Using toonFetch (direct)">{`<span class="kw">import</span> { <span class="fn">toonFetch</span> } <span class="kw">from</span> <span class="str">"toonkit2"</span>;
 
 <span class="kw">const</span> result = <span class="kw">await</span> <span class="fn">toonFetch</span>(<span class="str">"/api/devices"</span>);
 <span class="kw">const</span> data = result.data; <span class="comment">// already parsed</span>`}</CodeBlock>
           </section>
           {/* ── FETCH CLIENT ── */}
           <section id="fetch" className="section-anim" style={{ marginBottom: 64 }}>
-            <SectionHeader id="fetch" icon="🌐" title="Fetch client" subtitle="`toonFetch`, `configureToonFetch`, and `createToonAxios` examples" />
+            <SectionHeader id="fetch" icon="🌐" title="Fetch client" subtitle="`toonFetch`, `configureToonAxios`, and `createToonAxios` examples" />
 
             <p style={{ fontSize: 14, color: theme.textDim, marginBottom: 12 }}>
-              `toonkit` provides a lightweight fetch wrapper and axios helpers that automatically
+              `toonkit2` provides a lightweight fetch wrapper and axios helpers that automatically
               handle TOON serialization and parsing, plus convenience token handling.
             </p>
 
             <h4 style={{ fontSize: 14, color: theme.text, marginBottom: 8 }}>Basic GET</h4>
-            <CodeBlock label="Basic GET">{`<span class="kw">import</span> { <span class="fn">toonFetch</span> } <span class="kw">from</span> <span class="str">"toonkit"</span>;
+            <CodeBlock label="Basic GET">{`<span class="kw">import</span> { <span class="fn">toonFetch</span> } <span class="kw">from</span> <span class="str">"toonkit2"</span>;
 
 <span class="kw">const</span> res = <span class="kw">await</span> <span class="fn">toonFetch</span>(<span class="str">"https://localhost:3000/users"</span>);
 console.log(res.data);`}</CodeBlock>
@@ -1402,21 +1402,21 @@ console.log(res.data);`}</CodeBlock>
             <CodeBlock label="Full Example">{`const res = <span class="kw">await</span> <span class="fn">toonFetch</span>(<span class="str">"https://localhost:3000/create-user"</span>, {
   method: <span class="str">"POST"</span>,
   token: <span class="str">"jwt_token_here"</span>,
-  headers: { "x-app": <span class="str">"toonkit"</span> },
+  headers: { "x-app": <span class="str">"toonkit2"</span> },
   data: { username: <span class="str">"manoj"</span>, email: <span class="str">"manoj@gmail.com"</span> }
 });
 
 console.log(res.data);`}</CodeBlock>
 
             <h4 style={{ fontSize: 14, color: theme.text, marginBottom: 8 }}>Configure global base URL</h4>
-            <CodeBlock label="configureToonFetch">{`<span class="kw">import</span> { <span class="fn">configureToonFetch</span> } <span class="kw">from</span> <span class="str">"toonkit"</span>;
+            <CodeBlock label="configureToonAxios">{`<span class="kw">import</span> { <span class="fn">configureToonAxios</span> } <span class="kw">from</span> <span class="str">"toonkit2"</span>;
 
-<span class="fn">configureToonFetch</span>({ baseURL: <span class="str">"https://api.example.com"</span>, token: () =&gt; localStorage.getItem(<span class="str">"token"</span>) });
+<span class="fn">configureToonAxios</span>({ baseURL: <span class="str">"https://api.example.com"</span>, token: () =&gt; localStorage.getItem(<span class="str">"token"</span>) });
 
 // now: await toonFetch('/users') -> https://api.example.com/users`}</CodeBlock>
 
             <h4 style={{ fontSize: 14, color: theme.text, marginBottom: 8 }}>Create a separate axios client</h4>
-            <CodeBlock label="createToonAxios">{`<span class="kw">import</span> { <span class="fn">createToonAxios</span> } <span class="kw">from</span> <span class="str">"toonkit"</span>;
+            <CodeBlock label="createToonAxios">{`<span class="kw">import</span> { <span class="fn">createToonAxios</span> } <span class="kw">from</span> <span class="str">"toonkit2"</span>;
 
 <span class="kw">const</span> api = <span class="fn">createToonAxios</span>({ baseURL: <span class="str">"https://api.example.com"</span>, token: <span class="str">"abc123"</span> });
 
