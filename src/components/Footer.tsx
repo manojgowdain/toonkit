@@ -10,6 +10,10 @@ export default function Footer() {
         {" • "}
         <Link href="https://www.npmjs.com/package/toonkit2" target="_blank" rel="noopener noreferrer">npm: toonkit2</Link>
         {" • "}
+        <Link href="https://www.npmjs.com/package/toonkit" target="_blank" rel="noopener noreferrer">legacy npm: toonkit</Link>
+        {" • "}
+        <Link href="https://www.jsdelivr.com/package/npm/toonkit2" target="_blank" rel="noopener noreferrer">jsDelivr: toonkit2</Link>
+        {" • "}
         <Link href="https://jsr.io/@manojgowdain/toonkit2" target="_blank" rel="noopener noreferrer">JSR: toonkit2</Link>
         {" • "}
         <Link href="https://manojgowda.in" target="_blank" rel="noopener noreferrer">Manoj Gowda</Link>

@@ -108,6 +108,7 @@ async function main() {
         assert.equal(typeof core.toon.toJSON, 'function');
         assert.equal(typeof core.toon.clone, 'function');
         assert.equal(typeof core.toon.equals, 'function');
+        assert.equal(core.toon.version(), '2.5.1');
         assert.deepEqual(core.toonToJson('name[1]{0:s}:\nToon\n'), { name: 'Toon' });
         assert.deepEqual(core.toonToJson(`number[1]{0:n}:
 36.7

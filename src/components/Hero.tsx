@@ -212,6 +212,16 @@ export default function Hero() {
           <Button
             variant="outlined"
             component={Link}
+            href="https://www.npmjs.com/package/toonkit"
+            target="_blank"
+            size="small"
+          >
+            LEGACY NPM PACKAGE
+          </Button>
+
+          <Button
+            variant="outlined"
+            component={Link}
             href="https://jsr.io/@manojgowdain/toonkit2"
             target="_blank"
             size="small"
@@ -222,11 +232,11 @@ export default function Hero() {
           <Button
             variant="outlined"
             component={Link}
-            href="https://www.npmjs.com/package/toonkit2"
+            href="https://www.jsdelivr.com/package/npm/toonkit2"
             target="_blank"
             size="small"
           >
-            TOONKIT2 NPM
+            jsDelivr CDN
           </Button>
 
           <Button

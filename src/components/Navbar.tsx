@@ -26,8 +26,8 @@ export default function Navbar() {
       >
         <Typography variant="body2">
           <strong>toonkit</strong> is the old legacy package.{" "}
-          <Link href="https://www.npmjs.com/package/toonkit2" target="_blank" rel="noopener">
-            <strong>toonkit2</strong> is the official recommended package
+          <Link href="https://www.npmjs.com/package/toonkit" target="_blank" rel="noopener">
+            <strong>toonkit</strong> is the legacy npm package
           </Link>{" "}
             <Link href="https://toonkit.js.org" target="_blank" rel="noopener">
             <strong>toonkit.js.org</strong> is the official recommended Site

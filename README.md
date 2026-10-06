@@ -7,6 +7,8 @@ TOON parser, serializer, and framework adapter toolkit for JavaScript and TypeSc
 
 - Documentation: https://toonkit.js.org/
 - Recommended npm package: https://www.npmjs.com/package/toonkit2
+- Legacy npm package: https://www.npmjs.com/package/toonkit
+- jsDelivr package: https://www.jsdelivr.com/package/npm/toonkit2
 - JSR package: https://jsr.io/@manojgowdain/toonkit2
 - Source repository: https://github.com/manojgowdain/toonkit
 - Developer: https://manojgowda.in/
@@ -18,8 +20,23 @@ Install the new package for all new projects:
 npm install toonkit2
 ```
 
+For browser usage without a package manager, load the 2.5.0 build from
+[jsDelivr](https://www.jsdelivr.com/package/npm/toonkit2):
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/toonkit2@2.5.0/dist/cjs/index.min.js"></script>
+<script type="module">
+  import toonkit2 from "https://cdn.jsdelivr.net/npm/toonkit2@2.5.0/+esm";
+</script>
+```
+
 `toonkit` is the legacy package name. See the
 [official documentation](https://toonkit.js.org/docs) for migration guidance.
+Existing projects can continue installing the legacy package with:
+
+```bash
+npm i toonkit
+```
 
 If an existing project reports that `value.toJSON` is undefined, update its
 lockfile-pinned dependency:
@@ -100,6 +117,8 @@ Supported type codes:
 
 ```ts
 import { toon } from "toonkit2";
+
+console.log(toon.version()); // "2.5.1"
 
 const employees = toon`
 employees[2]{id:n,name:s,salary:n,active:b}:

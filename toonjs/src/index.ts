@@ -393,6 +393,7 @@ export interface ToonTagged {
   toJSON<T>(value: T): T;
   clone<T>(value: T): T;
   equals(a: unknown, b: unknown): boolean;
+  version(): string;
 }
 
 export const toon: ToonTagged = ((first: TemplateStringsArray | ToonValue, ...values: unknown[]) => {
@@ -424,6 +425,7 @@ toon.toToon = (value) => {
 toon.toJSON = (value) => cloneValue(value);
 toon.clone = cloneValue;
 toon.equals = equalValue;
+toon.version = () => "2.5.1";
 
 export {
   configureToonFetch as configureToonAxios,

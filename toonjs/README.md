@@ -8,6 +8,8 @@ This package is the released 2.x package name for the TOON toolkit.
 
 - Official documentation: https://toonkit.js.org/
 - npm: https://www.npmjs.com/package/toonkit2
+- Legacy npm: https://www.npmjs.com/package/toonkit
+- jsDelivr: https://www.jsdelivr.com/package/npm/toonkit2
 - JSR: https://jsr.io/@manojgowdain/toonkit2
 - GitHub: https://github.com/manojgowdain/toonkit
 - Author: https://manojgowda.in/
@@ -16,6 +18,12 @@ This package is the released 2.x package name for the TOON toolkit.
 For new applications, install `toonkit2`. The older `toonkit` package is
 maintained only as a legacy package name; use the official documentation for
 migration guidance.
+
+Existing projects can continue installing the legacy package with:
+
+```bash
+npm i toonkit
+```
 
 ## What it exports
 
@@ -41,6 +49,16 @@ The package also exposes adapter subpaths:
 
 ```bash
 npm install toonkit2
+```
+
+For browser usage without a package manager, load the 2.5.0 build from
+[jsDelivr](https://www.jsdelivr.com/package/npm/toonkit2):
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/toonkit2@2.5.0/dist/cjs/index.min.js"></script>
+<script type="module">
+  import toonkit2 from "https://cdn.jsdelivr.net/npm/toonkit2@2.5.0/+esm";
+</script>
 ```
 
 Use the current release when upgrading an existing project:
@@ -95,6 +113,8 @@ JavaScript value while retaining its schema for serialization:
 ```ts
 import { toon } from "toonkit2";
 
+console.log(toon.version()); // "2.5.1"
+
 const employees = toon`
 employees[2]{id:n,name:s,salary:n,active:b}:
 1,Riya,90000,true
@@ -113,7 +133,8 @@ The runtime supports normal array operations, direct mutation, template
 interpolation, `JSON.stringify`, and compact serialization with updated row
 counts and schemas. Runtime values expose `toToon()` and `toJSON()`. The
 namespace also exposes `toon.toToon(value)`, `toon.toJSON(value)`,
-`toon.clone(value)`, and `toon.equals(a, b)`.
+`toon.clone(value)`, `toon.equals(a, b)`, and `toon.version()`.
+Use `toon.version()` to verify the installed `toonkit2` release.
 
 ### `toonToJson(input: string)`
 

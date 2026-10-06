@@ -684,6 +684,22 @@ export default function ToonkitDocs({ sectionSlug }: { sectionSlug?: string } = 
               ↗ Recommended NPM Package
             </a>
             <a
+              href="https://www.npmjs.com/package/toonkit"
+              target="_blank"
+              rel="noreferrer"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                fontSize: 12,
+                color: theme.textMuted,
+                textDecoration: "none",
+                fontFamily: "'Space Mono', monospace",
+              }}
+            >
+              ↗ Legacy NPM Package
+            </a>
+            <a
               href="https://jsr.io/@manojgowdain/toonkit2"
               target="_blank"
               rel="noreferrer"
@@ -698,6 +714,22 @@ export default function ToonkitDocs({ sectionSlug }: { sectionSlug?: string } = 
               }}
             >
               ↗ JSR Package
+            </a>
+            <a
+              href="https://www.jsdelivr.com/package/npm/toonkit2"
+              target="_blank"
+              rel="noreferrer"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                fontSize: 12,
+                color: theme.textMuted,
+                textDecoration: "none",
+                fontFamily: "'Space Mono', monospace",
+              }}
+            >
+              ↗ jsDelivr CDN
             </a>
           </div>
         </aside>
@@ -902,12 +934,39 @@ export default function ToonkitDocs({ sectionSlug }: { sectionSlug?: string } = 
             <SectionHeader id="install" icon="📥" title="Installation" />
 
             <CodeBlock label="npm">{`<span class="fn">npm</span> install toonkit2`}</CodeBlock>
+            <CodeBlock label="Legacy npm">{`<span class="fn">npm</span> i toonkit`}</CodeBlock>
             <CodeBlock label="yarn">{`<span class="fn">yarn</span> add toonkit2`}</CodeBlock>
             <CodeBlock label="pnpm">{`<span class="fn">pnpm</span> add toonkit2`}</CodeBlock>
+            <p style={{ color: theme.textDim, lineHeight: 1.7, marginTop: 16 }}>
+              Use the{" "}
+              <a
+                href="https://www.jsdelivr.com/package/npm/toonkit2"
+                target="_blank"
+                rel="noreferrer"
+                style={{ color: theme.accent }}
+              >
+                jsDelivr package
+              </a>{" "}
+              for browser usage without a package manager:
+            </p>
+            <CodeBlock label="jsDelivr (browser)">{`<span class="kw">&lt;script</span> <span class="fn">src</span>=<span class="str">"https://cdn.jsdelivr.net/npm/toonkit2@2.5.0/dist/cjs/index.min.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
+<span class="kw">&lt;script</span> <span class="fn">type</span>=<span class="str">"module"</span><span class="kw">&gt;</span>
+  <span class="kw">import</span> toonkit2 <span class="kw">from</span> <span class="str">"https://cdn.jsdelivr.net/npm/toonkit2@2.5.0/+esm"</span>;
+<span class="kw">&lt;/script&gt;</span>`}</CodeBlock>
             <p style={{ color: theme.textDim, lineHeight: 1.7, marginTop: 16 }}>
               <strong>Major package update:</strong> <code>toonkit</code> is the
               old legacy package name. <code>toonkit2</code> is the official
               recommended package for all new applications.
+              {" "}See the{" "}
+              <a
+                href="https://www.npmjs.com/package/toonkit"
+                target="_blank"
+                rel="noreferrer"
+                style={{ color: theme.accent }}
+              >
+                legacy npm package
+              </a>{" "}
+              for existing projects.
             </p>
           </DocSection>
 
@@ -931,9 +990,10 @@ export default function ToonkitDocs({ sectionSlug }: { sectionSlug?: string } = 
             </div>
 
             {tabImport === "esm" ? (
-              <CodeBlock label="ES Module Import">{`<span class="kw">import</span> { <span class="fn">toonToJson</span>, <span class="fn">jsonToToon</span>, <span class="fn">toonFetch</span> } <span class="kw">from</span> <span class="str">"toonkit2"</span>;
-<span class="kw">import</span> { <span class="fn">toon</span> } <span class="kw">from</span> <span class="str">"toonkit2/express"</span>;
-// or: import { toon } from "toonkit2/fastify"`}</CodeBlock>
+              <CodeBlock label="ES Module Import">{`<span class="kw">import</span> { <span class="fn">toon</span>, <span class="fn">toonToJson</span>, <span class="fn">jsonToToon</span>, <span class="fn">toonFetch</span> } <span class="kw">from</span> <span class="str">"toonkit2"</span>;
+<span class="fn">console</span>.log(toon.<span class="fn">version</span>()); <span class="cm">// "2.5.1"</span>
+<span class="kw">import</span> { <span class="fn">toon</span> <span class="kw">as</span> expressToon } <span class="kw">from</span> <span class="str">"toonkit2/express"</span>;
+// or: import { toon as fastifyToon } from "toonkit2/fastify"`}</CodeBlock>
             ) : (
               <CodeBlock label="CommonJS Require">{`<span class="kw">const</span> { <span class="fn">toonToJson</span>, <span class="fn">jsonToToon</span>, <span class="fn">toonFetch</span> } = <span class="fn">require</span>(<span class="str">"toonkit2"</span>);
 <span class="kw">const</span> { <span class="fn">toon</span> } = <span class="kw">require</span>(<span class="str">"toonkit2/express"</span>);`}</CodeBlock>
@@ -979,6 +1039,10 @@ export default function ToonkitDocs({ sectionSlug }: { sectionSlug?: string } = 
                 {
                   fn: "toon.equals(a, b)",
                   desc: "Checks two values for structural equality.",
+                },
+                {
+                  fn: "toon.version()",
+                  desc: "Returns the installed toonkit2 package version for runtime verification.",
                 },
               ].map((item, i) => (
                 <div
